@@ -1,7 +1,7 @@
 <p align="center"><img src="assets/logos/128x128.png">
  <h1 align="center">Stargate Consul</h1>
   <p align="center">
-    This library provides a [Stargate](https://github.com/ba-st/Stargate) operational plugin to interact with the [Consul](https://www.consul.io) HTTP API.
+ This library provides a <a href="https://github.com/ba-st/Stargate">Stargate</a> operational plugin to interact with the <a href="https://www.consul.io">Consul</a> HTTP API.
     <br>
     <a href="docs/"><strong>Explore the docs »</strong></a>
     <br>
