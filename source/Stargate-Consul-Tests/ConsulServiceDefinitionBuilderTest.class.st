@@ -62,6 +62,64 @@ ConsulServiceDefinitionBuilderTest >> testServiceWithMetadata [
 ]
 
 { #category : #tests }
+ConsulServiceDefinitionBuilderTest >> testServiceWithOnlyOneCheck [
+
+	| definition |
+
+	definition := builder
+		addCheck:
+			( ConsulAgentDockerBasedCheck
+				named: 'check'
+				executing: '/bin/bash'
+				withArguments: #('true')
+				inContainer: 'xxx'
+				every: 1 milliSecond );
+		buildNamed: 'redis'.
+
+	self
+		assertNameIn: definition equals: 'redis';
+		assertDefinition: definition
+			jsonEquals:
+			'{"Name":"redis","Checks":[{"Name":"check","Shell":"/bin/bash","Args":["true"],"DockerContainerID":"xxx","Interval":"1ms"}]}'
+]
+
+{ #category : #tests }
+ConsulServiceDefinitionBuilderTest >> testServiceWithSeveralChecks [
+
+	| definition |
+
+	definition := builder
+		addCheck:
+			( ConsulAgentDockerBasedCheck
+				named: 'check'
+				executing: '/bin/bash'
+				withArguments: #('true')
+				inContainer: 'xxx'
+				every: 1 milliSecond );
+		addCheck:
+			( ConsulAgentHTTPBasedCheck
+				named: 'ping'
+				executing: #GET
+				against: 'https://api.example.com'
+				withHeaders: #()
+				every: 100 milliSeconds
+				timeoutAfter: 1 minute );
+		buildNamed: 'redis'.
+
+	self
+		assertNameIn: definition equals: 'redis';
+		assertDefinition: definition
+			jsonEquals:
+			'{
+				"Name":"redis",
+				"Checks":[
+					{"Name":"check","Shell":"/bin/bash","Args":["true"],"DockerContainerID":"xxx","Interval":"1ms"},
+					{"Name":"ping","HTTP":"https://api.example.com/","Method":"GET","Header":{},"Interval":"100ms","Timeout":"1m"}
+				]
+			}'
+]
+
+{ #category : #tests }
 ConsulServiceDefinitionBuilderTest >> testServiceWithTaggedAddresses [
 
 	| definition |

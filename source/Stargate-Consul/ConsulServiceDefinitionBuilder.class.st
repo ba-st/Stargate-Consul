@@ -41,6 +41,15 @@ ConsulServiceDefinitionBuilder >> addAsWANAddress: aString at: aPortNumber [
 ]
 
 { #category : #configuring }
+ConsulServiceDefinitionBuilder >> addCheck: aConsulAgentCheck [
+
+	| checks |
+
+	checks := serviceDefinition at: 'Checks' ifAbsentPut: [ OrderedCollection new ].
+	checks add: aConsulAgentCheck
+]
+
+{ #category : #configuring }
 ConsulServiceDefinitionBuilder >> addTag: aString [
 
 	| tags |
