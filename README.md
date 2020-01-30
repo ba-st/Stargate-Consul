@@ -19,7 +19,7 @@
 [![Pharo 8.0](https://img.shields.io/badge/Pharo-8.0-informational)](https://pharo.org)
 
 
-The integration provided in the operational plugin interacts with Consult HTTP API to register and deregister the configured services when the API starts/stops.
+The integration provided in the operational plugin interacts with Consul HTTP API to register and deregister the configured services when the API starts/stops.
 
 ## License
 
