@@ -2,8 +2,7 @@ Class {
 	#name : #ConsulServiceDiscoveryPluginInteractionTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'consulAgent',
-		'registeredServices'
+		'consulAgent'
 	],
 	#category : #'Stargate-Consul-Tests'
 }
@@ -40,29 +39,6 @@ ConsulServiceDiscoveryPluginInteractionTest >> configureConsulAgent [
 					]
 ]
 
-{ #category : #running }
-ConsulServiceDiscoveryPluginInteractionTest >> handleServiceDeregistrationFrom: request [
-
-	| serviceId |
-
-	self assert: request method equals: #PUT.
-	serviceId := request at: #identifier.
-	registeredServices removeAllSuchThat: [ :service | service ID = serviceId ]
-]
-
-{ #category : #running }
-ConsulServiceDiscoveryPluginInteractionTest >> handleServiceRegistrationFrom: request [
-
-	| service |
-
-	self
-		assert: request method equals: #PUT;
-		assert: request contents notEmpty.
-	service := NeoJSONObject fromString: request contents.
-	service at: #ID ifAbsentPut: [ service at: #Name ].
-	registeredServices add: service
-]
-
 { #category : #accessing }
 ConsulServiceDiscoveryPluginInteractionTest >> port [
 
@@ -73,10 +49,12 @@ ConsulServiceDiscoveryPluginInteractionTest >> port [
 ConsulServiceDiscoveryPluginInteractionTest >> setUp [
 
 	super setUp.
-	registeredServices := OrderedCollection new.
-	consulAgent := Teapot
-		configure: { #port -> self port. #serverUrl -> self baseUrl. #debugMode -> true }.
-	self configureConsulAgent.
+	consulAgent := FakeConsulAgentAPI
+		configuredBy:
+			{( #port -> self port ).
+			( #serverUrl -> self baseUrl ).
+			( #debugMode -> true )}
+		on: self.
 	consulAgent start
 ]
 
@@ -96,12 +74,12 @@ ConsulServiceDiscoveryPluginInteractionTest >> testStartOn [
 		reportingLifecycleOf: ( ConsulServiceDefinitionBuilder new buildNamed: 'test' )
 		toAgentOn: self baseUrl.
 
-	self assert: registeredServices isEmpty.
+	self assert: consulAgent registeredServices isEmpty.
 
 	plugin startOn: self apiServer.
 
 	self
-		withTheOnlyOneIn: registeredServices
+		withTheOnlyOneIn: consulAgent registeredServices
 		do: [ :registeredService | 
 			self
 				assert: registeredService Name equals: 'test';
@@ -118,13 +96,13 @@ ConsulServiceDiscoveryPluginInteractionTest >> testStop [
 		reportingLifecycleOf: ( ConsulServiceDefinitionBuilder new buildNamed: 'test' )
 		toAgentOn: self baseUrl.
 
-	self assert: registeredServices isEmpty.
+	self assert: consulAgent registeredServices isEmpty.
 
 	plugin startOn: self apiServer.
 
-	self assert: registeredServices size equals: 1.
+	self assert: consulAgent registeredServiceCount equals: 1.
 
 	plugin stop.
 
-	self assert: registeredServices isEmpty
+	self assert: consulAgent registeredServices isEmpty
 ]

@@ -18,6 +18,17 @@ ConsulServiceDiscoveryPlugin class >> configureMediaControlsIn: builder within: 
 
 ]
 
+{ #category : #'instance creation' }
+ConsulServiceDiscoveryPlugin class >> configuredBy: configuration [
+
+	| selfConfiguration |
+
+	selfConfiguration := self pluginConfigurationOn: configuration.
+	^ self
+		reportingLifecycleOfAll: ( selfConfiguration at: #definitions )
+		toAgentOn: ( selfConfiguration at: #consulAgentLocation ifAbsent: [ 'http://localhost:8500' asUrl ] )
+]
+
 { #category : #accessing }
 ConsulServiceDiscoveryPlugin class >> endpoint [
 
