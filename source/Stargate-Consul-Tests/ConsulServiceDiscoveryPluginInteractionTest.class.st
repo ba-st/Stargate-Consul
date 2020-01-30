@@ -19,26 +19,6 @@ ConsulServiceDiscoveryPluginInteractionTest >> baseUrl [
 	^ 'http://localhost' asUrl port: self port
 ]
 
-{ #category : #running }
-ConsulServiceDiscoveryPluginInteractionTest >> configureConsulAgent [
-
-	"I will simulate the Consul Agent HTTP API"
-
-	consulAgent
-		PUT:
-			'/agent/service/register'
-				-> [ :request | 
-					self handleServiceRegistrationFrom: request.
-					TeaResponse ok
-					];
-		PUT:
-			'/agent/service/deregister/<identifier:IsObject>'
-				-> [ :request | 
-					self handleServiceDeregistrationFrom: request.
-					TeaResponse ok
-					]
-]
-
 { #category : #accessing }
 ConsulServiceDiscoveryPluginInteractionTest >> port [
 
