@@ -1,5 +1,5 @@
 "
-I'm a builder intended to simplify the creation of service definitions under the Consult umbrella (See https://www.consul.io/docs/agent/services.html for details)
+I'm a builder intended to simplify the creation of service definitions under the Consult umbrella (See https://www.consul.io/docs/agent/services.html for details).
 "
 Class {
 	#name : #ConsulServiceDefinitionBuilder,

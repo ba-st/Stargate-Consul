@@ -1,6 +1,6 @@
 "
 I represent an application-level health check to be performed by a Consul agent and associated with a service.
-There are sevearl kind of checks represented in my subclasses.
+There are several checks represented by my subclasses.
 "
 Class {
 	#name : #ConsulAgentCheck,

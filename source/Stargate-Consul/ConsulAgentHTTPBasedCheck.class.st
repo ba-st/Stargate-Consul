@@ -22,7 +22,7 @@ ConsulAgentHTTPBasedCheck class >> named: aName executing: anHttpMethod against:
 		raising: InstanceCreationFailed;
 		checking: [ :asserter | 
 			asserter
-				enforce: [ aName notEmpty ] because: 'A check name cannot be empty';
+				enforce: [ aName notEmpty ] because: 'The check name cannot be empty';
 				enforce: [ aDuration positive and: [ aDuration isZero not ] ]
 					because: 'The execution interval must be strictly positive';
 				enforce: [ timeoutDuration positive and: [ timeoutDuration isZero not ] ]

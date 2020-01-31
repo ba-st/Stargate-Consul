@@ -41,7 +41,7 @@ ConsulAgentDockerBasedCheckTest >> testCantCreateUnnamed [
 				every: 10 seconds
 			]
 		raise: InstanceCreationFailed
-		withMessageText: 'A check name cannot be empty'
+		withMessageText: 'The check name cannot be empty'
 ]
 
 { #category : #tests }
@@ -56,7 +56,7 @@ ConsulAgentDockerBasedCheckTest >> testCantCreateWhenShellCommandIsMissing [
 				every: 10 seconds
 			]
 		raise: InstanceCreationFailed
-		withMessageText: 'A command cannot be empty'
+		withMessageText: 'The command to execute cannot be empty'
 ]
 
 { #category : #tests }

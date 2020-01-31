@@ -68,7 +68,7 @@ ConsulAgentHTTPBasedCheckTest >> testCantCreateUnnamed [
 				timeoutAfter: 1.5 minutes
 			]
 		raise: InstanceCreationFailed
-		withMessageText: 'A check name cannot be empty'
+		withMessageText: 'The check name cannot be empty'
 ]
 
 { #category : #tests }

@@ -2,7 +2,7 @@
 I'm a kind of Consul Agent health check depending on invoking an external application which is packaged within a Docker Container. 
 
 The application is triggered within the running container via the Docker Exec API. We expect that the Consul agent user has access to either the Docker HTTP API or the unix socket. 
-Consul uses $DOCKER_HOST to determine the Docker API endpoint. The application is expected to run, perform a health check of the service running inside the container, and exit with an appropriate exit code. The check should be paired with an invocation interval. The shell on which the check has to be performed is configurable which makes it possible to run containers which have different shells on the same host. Check output for Docker is limited to 4KB. Any output larger than this will be truncated. 
+Consul uses $DOCKER_HOST to determine the Docker API endpoint. The application is expected to run, perform a health check of the service running inside the container, and exit with an appropriate exit code. The check should be paired with an invocation interval. The shell on which the check has to be performed is configurable, which make possible to run containers which have different shells on the same host. Check output for Docker is limited to 4KB. Any output larger than this will be truncated. 
 "
 Class {
 	#name : #ConsulAgentDockerBasedCheck,
@@ -24,8 +24,8 @@ ConsulAgentDockerBasedCheck class >> named: aName executing: aCommand withArgume
 		raising: InstanceCreationFailed;
 		checking: [ :asserter | 
 			asserter
-				enforce: [ aName notEmpty ] because: 'A check name cannot be empty';
-				enforce: [ aCommand notEmpty ] because: 'A command cannot be empty';
+				enforce: [ aName notEmpty ] because: 'The check name cannot be empty';
+				enforce: [ aCommand notEmpty ] because: 'The command to execute cannot be empty';
 				enforce: [ aContainerId notEmpty ] because: 'The target container id cannot be empty';
 				enforce: [ aDuration positive and: [ aDuration isZero not ] ]
 					because: 'The execution interval must be strictly positive'
