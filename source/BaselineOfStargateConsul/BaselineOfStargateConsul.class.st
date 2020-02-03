@@ -40,10 +40,19 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 BaselineOfStargateConsul >> setUpPackages: spec [
 
 	spec
-		package: 'Stargate-Consul' with: [ spec requires: #('Stargate-Core') ];
+		package: 'Stargate-Consul' with: [ spec requires: 'Stargate-Core' ];
 		group: 'Deployment' with: 'Stargate-Consul'.
 
 	spec
 		package: 'Stargate-Consul-Tests' with: [ spec requires: #('Stargate-Consul' 'Stargate-SUnit') ];
-		group: 'Tests' with: 'Stargate-Consul-Tests'
+		group: 'Tests' with: 'Stargate-Consul-Tests'.
+
+	spec
+		package: 'Stargate-Consul-Examples' with: [ spec requires: #('Stargate-Consul') ];
+		group: 'Examples' with: 'Stargate-Consul-Examples'.
+
+	spec
+		package: 'Stargate-Consul-Examples-Tests'
+			with: [ spec requires: #('Stargate-Consul-Examples' 'Stargate-SUnit') ];
+		group: 'Tests' with: 'Stargate-Consul-Examples-Tests'
 ]
