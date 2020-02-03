@@ -13,7 +13,7 @@ StargateConsulExampleLauncherTest >> testActivate [
 		shouldnt: [ launcher := StargateConsulExampleLauncher new
 				commandLine:
 					( CommandLineArguments
-						withArguments: #('--public-URL=http://localhost' '--consul-agent-location=http://consul:8500') );
+						withArguments: #('--public-URL=http://localhost' '--consul-agent-location=http://consul:8500' '--debug-mode') );
 				disableConsulServiceDiscoveryPlugin;
 				activate
 			]
