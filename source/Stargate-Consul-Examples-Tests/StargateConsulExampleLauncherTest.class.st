@@ -10,7 +10,8 @@ StargateConsulExampleLauncherTest >> testActivate [
 	| launcher |
 
 	[ self
-		shouldnt: [ launcher := StargateConsulExampleLauncher new
+		shouldnt: [ launcher := StargateConsulExampleLauncher new.
+			launcher
 				commandLine:
 					( CommandLineArguments
 						withArguments: #('--public-URL=http://localhost' '--consul-agent-location=http://consul:8500' '--debug-mode') );

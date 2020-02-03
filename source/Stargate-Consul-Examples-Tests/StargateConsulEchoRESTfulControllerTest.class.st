@@ -4,6 +4,18 @@ Class {
 	#category : #'Stargate-Consul-Examples-Tests'
 }
 
+{ #category : #'private - support' }
+StargateConsulEchoRESTfulControllerTest >> baseUrl [
+
+	^ 'http://api.example.com' asUrl
+]
+
+{ #category : #running }
+StargateConsulEchoRESTfulControllerTest >> setUpResourceController [
+
+	resourceController := StargateConsulEchoRESTfulController new
+]
+
 { #category : #tests }
 StargateConsulEchoRESTfulControllerTest >> testMessageText [
 
