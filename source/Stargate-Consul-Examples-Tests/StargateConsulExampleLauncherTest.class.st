@@ -9,15 +9,17 @@ StargateConsulExampleLauncherTest >> testActivate [
 
 	| launcher |
 
-	self
+	[ self
 		shouldnt: [ launcher := StargateConsulExampleLauncher new
-				commandLine: ( CommandLineArguments withArguments: #('--public-URL=http://localhost') );
+				commandLine:
+					( CommandLineArguments
+						withArguments: #('--public-URL=http://localhost' '--consul-agent-location=http://consul:8500') );
 				disableConsulServiceDiscoveryPlugin;
 				activate
 			]
-		raise: Exit.
-
-	launcher stop
+		raise: Exit
+	]
+		ensure: [ launcher stop ]
 ]
 
 { #category : #tests }

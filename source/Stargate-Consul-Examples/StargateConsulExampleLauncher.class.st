@@ -71,22 +71,21 @@ StargateConsulExampleLauncher >> consulServiceDiscoveryConfiguration [
 
 	^ Dictionary new
 		at: #enabled put: consulServiceDiscoveryIsEnabled;
-		at:
-			#definitions
-				->
-					{( ConsulServiceDefinitionBuilder new
-						addCheck:
-							( ConsulAgentHTTPBasedCheck
-								named: 'health-check'
-								executing: #POST
-								against: self publicURL / 'operations' asUrl / HealthCheckPlugin endpoint
-								withHeaders:
-									{( #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0' ).
-									( #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken ) )}
-								every: 10 seconds
-								timeoutAfter: 1 minute );
-						buildNamed: 'echo' )};
-		at: #consulAgentLocation -> ( self configuration at: 'consul-agent-location' );
+		at: #definitions
+			put:
+			{( ConsulServiceDefinitionBuilder new
+				addCheck:
+					( ConsulAgentHTTPBasedCheck
+						named: 'health-check'
+						executing: #POST
+						against: self publicURL / 'operations' asUrl / HealthCheckPlugin endpoint
+						withHeaders:
+							{( #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0' ).
+							( #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken ) )}
+						every: 10 seconds
+						timeoutAfter: 1 minute );
+				buildNamed: 'echo' )};
+		at: #consulAgentLocation put: ( self configuration at: 'consul-agent-location' );
 		yourself
 ]
 
