@@ -1,8 +1,13 @@
 language: smalltalk
 sudo: false
+services:
+  - docker
 os:
 - linux
 smalltalk:
 - Pharo64-8.0
 - Pharo64-7.0
 - Pharo32-7.0
+script:
+  - smalltalkci
+  - docker-compose up --project-directory api-tests
