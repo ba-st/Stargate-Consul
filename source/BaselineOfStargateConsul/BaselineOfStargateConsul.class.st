@@ -16,7 +16,7 @@ BaselineOfStargateConsul >> baseline: spec [
 			spec
 				group: 'CI' with: 'Tests';
 				group: 'Tools' with: #('Stargate-Tools');
-				group: 'Development' with: #('Tests' 'Tools')
+				group: 'Development' with: #('Tests' 'Tools' 'Examples')
 			]
 ]
 
@@ -33,7 +33,11 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v4/source' ];
 		project: 'Stargate-Core' copyFrom: 'Stargate' with: [ spec loads: 'Core' ];
 		project: 'Stargate-SUnit' copyFrom: 'Stargate' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
-		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ]
+		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
+
+	spec
+		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v2/source' ];
+		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ]
 ]
 
 { #category : #baselines }
@@ -48,7 +52,7 @@ BaselineOfStargateConsul >> setUpPackages: spec [
 		group: 'Tests' with: 'Stargate-Consul-Tests'.
 
 	spec
-		package: 'Stargate-Consul-Examples' with: [ spec requires: #('Stargate-Consul') ];
+		package: 'Stargate-Consul-Examples' with: [ spec requires: #('Stargate-Consul' 'Launchpad-Deployment') ];
 		group: 'Examples' with: 'Stargate-Consul-Examples'.
 
 	spec

@@ -144,5 +144,5 @@ StargateConsulExampleLauncher >> publicURL [
 { #category : #'private - activation' }
 StargateConsulExampleLauncher >> stop [
 
-	api stop
+	api ifNotNil: [ :theAPI | theAPI stop ]
 ]
