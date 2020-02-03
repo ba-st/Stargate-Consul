@@ -32,6 +32,9 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 	spec
 		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v4/source' ];
 		project: 'Stargate-Core' copyFrom: 'Stargate' with: [ spec loads: 'Core' ];
+		project: 'Stargate-HealthCheck-Deployment'
+			copyFrom: 'Stargate'
+			with: [ spec loads: 'HealthCheck' ];
 		project: 'Stargate-SUnit' copyFrom: 'Stargate' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
 
@@ -52,7 +55,8 @@ BaselineOfStargateConsul >> setUpPackages: spec [
 		group: 'Tests' with: 'Stargate-Consul-Tests'.
 
 	spec
-		package: 'Stargate-Consul-Examples' with: [ spec requires: #('Stargate-Consul' 'Launchpad-Deployment') ];
+		package: 'Stargate-Consul-Examples'
+			with: [ spec requires: #('Stargate-Consul' 'Launchpad-Deployment' 'Stargate-HealthCheck-Deployment') ];
 		group: 'Examples' with: 'Stargate-Consul-Examples'.
 
 	spec
