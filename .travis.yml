@@ -10,4 +10,4 @@ smalltalk:
 - Pharo32-7.0
 script:
   - smalltalkci
-  - docker-compose up --project-directory api-tests
+  - docker-compose -f api-tests/docker-compose.yml up

@@ -5,5 +5,5 @@ branchName ifEmpty: [ branchName := 'release-candidate'].
 
 Metacello new
 	baseline: 'StargateConsul';
-	repository: 'github://ba-st/Stargate-Consul:release-candidate/source';
+	repository: ('github://ba-st/Stargate-Consul:<1s>/source' expandMacrosWith: branchName);
 	load: 'Examples'.
