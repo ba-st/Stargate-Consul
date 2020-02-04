@@ -51,12 +51,29 @@ ConsulAgentHTTPBasedCheck >> asDictionary [
 ]
 
 { #category : #initialization }
+ConsulAgentHTTPBasedCheck >> initializeHeadersBasedOn: aHeaderCollection [
+
+	"Consul expects an array of strings as values for the headers.	"
+
+	headers := Dictionary new.
+	aHeaderCollection asDictionary
+		keysAndValuesDo: [ :headerName :headerValue | 
+			headers
+				at: headerName
+				put:
+					( headerValue isArray
+						ifTrue: [ headerValue ]
+						ifFalse: [ Array with: headerValue ] )
+			]
+]
+
+{ #category : #initialization }
 ConsulAgentHTTPBasedCheck >> initializeNamed: aName executing: anHttpMethod against: anUrl withHeaders: aHeaderCollection every: aDuration timeoutAfter: timeoutDuration [
 
 	name := aName.
 	method := anHttpMethod.
 	url := anUrl.
-	headers := aHeaderCollection asDictionary.
+	self initializeHeadersBasedOn: aHeaderCollection.
 	invokationInterval := aDuration.
 	timeout := timeoutDuration
 ]

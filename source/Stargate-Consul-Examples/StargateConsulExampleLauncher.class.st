@@ -49,9 +49,10 @@ StargateConsulExampleLauncher >> basicActivate [
 		configuredBy: self apiConfiguration
 		installing: {StargateConsulEchoRESTfulController new}.
 
-	CurrentLogger value
-		logAsInfo: 'Installing API' during: [ api install ];
-		logAsInfo: 'Starting API' during: [ api start ]
+	CurrentLogger value logAsInfo: 'Installing API' during: [ api install ].
+	self isDebugModeEnabled
+		ifFalse: [ api on: Error addErrorHandler: [ :error | self class dumpStackAndReport: error ] ].
+	CurrentLogger value logAsInfo: 'Starting API' during: [ api start ]
 ]
 
 { #category : #'private - accessing' }
@@ -80,8 +81,8 @@ StargateConsulExampleLauncher >> consulServiceDiscoveryConfiguration [
 						executing: #POST
 						against: self publicURL / 'operations' asUrl / HealthCheckPlugin endpoint
 						withHeaders:
-							{( #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0' ).
-							( #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken ) )}
+							{ #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0'.
+							 #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken )}
 						every: 10 seconds
 						timeoutAfter: 1 minute );
 				buildNamed: 'echo' )};

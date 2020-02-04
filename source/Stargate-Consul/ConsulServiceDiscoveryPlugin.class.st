@@ -54,13 +54,19 @@ ConsulServiceDiscoveryPlugin class >> reportingLifecycleOfAll: aServiceDefinitio
 ]
 
 { #category : #private }
+ConsulServiceDiscoveryPlugin >> baseAPILocation [
+
+	^ consulAgentLocation / 'v1/agent/service'
+]
+
+{ #category : #private }
 ConsulServiceDiscoveryPlugin >> deregistrationUrlFor: serviceDefinition [
 
 	| serviceId |
 
 	serviceId := serviceDefinition at: #ID ifAbsent: [ serviceDefinition Name ].
 
-	^ consulAgentLocation / ( 'agent/service/deregister/<1s>' expandMacrosWith: serviceId )
+	^ self baseAPILocation / ( 'deregister/<1s>' expandMacrosWith: serviceId )
 ]
 
 { #category : #configuring }
@@ -79,11 +85,13 @@ ConsulServiceDiscoveryPlugin >> startOn: teapotServer [
 
 	serviceDefinitions
 		do: [ :serviceDefinition | 
-			ZnClient new
-				beOneShot;
-				enforceHttpSuccess;
-				put: consulAgentLocation / 'agent/service/register'
-					contents: ( NeoJSONWriter toString: serviceDefinition )
+			self
+				try: [ :client | 
+					client
+						put: self baseAPILocation / 'register'
+						contents: ( NeoJSONWriter toString: serviceDefinition )
+					]
+				retryCount: 3
 			]
 ]
 
@@ -92,9 +100,30 @@ ConsulServiceDiscoveryPlugin >> stop [
 
 	serviceDefinitions
 		do: [ :serviceDefinition | 
-			ZnClient new
-				beOneShot;
-				enforceHttpSuccess;
-				put: ( self deregistrationUrlFor: serviceDefinition ) contents: ''
+			self
+				try: [ :client | client put: ( self deregistrationUrlFor: serviceDefinition ) contents: '' ]
+				retryCount: 3
+			]
+]
+
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> try: aBlock retryCount: count [
+
+	| client |
+
+	client := ZnClient new.
+	client
+		beOneShot;
+		enforceHttpSuccess: true.
+	count = 1
+		ifTrue: [ aBlock value: client ]
+		ifFalse: [ [ aBlock value: client ]
+				on: ZnHttpUnsuccessful
+				do: [ :error | 
+					CurrentLogger value
+						logAsError:
+							( 'Consul Agent HTTP request failed: <1s>, retry count: <2p>' expandMacrosWith: error messageText with: count ).
+					self try: aBlock retryCount: count - 1
+					]
 			]
 ]

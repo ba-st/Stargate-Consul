@@ -23,9 +23,9 @@ FakeConsulAgentAPI >> configureTeapotServerWith: configuration [
 
 	server := Teapot configure: configuration.
 	server
-		PUT: '/agent/service/register' -> [ :request | self handleServiceRegistration: request ];
+		PUT: '/v1/agent/service/register' -> [ :request | self handleServiceRegistration: request ];
 		PUT:
-			'/agent/service/deregister/<identifier:IsObject>'
+			'/v1/agent/service/deregister/<identifier:IsObject>'
 				-> [ :request | self handleServiceDeregistration: request ]
 ]
 
