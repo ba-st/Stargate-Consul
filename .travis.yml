@@ -11,4 +11,4 @@ smalltalk:
 script:
   - smalltalkci
   - export TRAVIS_BRANCH
-  - compose-test.sh
+  - ./compose-test.sh
