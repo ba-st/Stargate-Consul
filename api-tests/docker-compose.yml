@@ -4,7 +4,7 @@ services:
     build:
       context: ./
       args:
-        - TRAVIS_BRANCH
+        - BRANCH_NAME
     ports:
       - "8080:8080"
     environment:

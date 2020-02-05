@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}" > .env
+if [[ -z "${TRAVIS_PULL_REQUEST_BRANCH}" ]]; then
+  echo "BRANCH_NAME=${TRAVIS_BRANCH}" > .env
+else
+  echo "BRANCH_NAME=${TRAVIS_PULL_REQUEST_BRANCH}" > .env
+fi
 docker-compose -f api-tests/docker-compose.yml up -d || exit 1
 sleep 10
 curl --fail http://localhost:8080/echo/hello || exit 1

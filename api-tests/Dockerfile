@@ -1,6 +1,6 @@
 # Stage 1: Load the project
 FROM basmalltalk/pharo:7.0-image AS loader
-ARG TRAVIS_BRANCH=release-candidate
+ARG BRANCH_NAME=release-candidate
 COPY load-project.st ./
 RUN pharo Pharo.image load-project.st --save --quit
 

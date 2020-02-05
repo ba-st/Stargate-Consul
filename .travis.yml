@@ -11,4 +11,5 @@ smalltalk:
 script:
   - smalltalkci
   - export TRAVIS_BRANCH
+  - export TRAVIS_PULL_REQUEST_BRANCH
   - ./compose-test.sh
