@@ -60,6 +60,12 @@ ConsulServiceDiscoveryPlugin >> baseAPILocation [
 ]
 
 { #category : #private }
+ConsulServiceDiscoveryPlugin >> connectivityErrors [
+
+	^ ZnHttpUnsuccessful , NetworkError
+]
+
+{ #category : #private }
 ConsulServiceDiscoveryPlugin >> deregistrationUrlFor: serviceDefinition [
 
 	| serviceId |
@@ -98,12 +104,17 @@ ConsulServiceDiscoveryPlugin >> startOn: teapotServer [
 { #category : #controlling }
 ConsulServiceDiscoveryPlugin >> stop [
 
-	serviceDefinitions
+	[ serviceDefinitions
 		do: [ :serviceDefinition | 
 			self
 				try: [ :client | client put: ( self deregistrationUrlFor: serviceDefinition ) contents: '' ]
 				retryCount: 3
 			]
+	]
+		on: self connectivityErrors
+		do: [ :error | "Since we are already stopping the API, just ignore it. 
+							Consul will figure out eventually that this service is dead." 
+							error return ]
 ]
 
 { #category : #private }
@@ -118,11 +129,13 @@ ConsulServiceDiscoveryPlugin >> try: aBlock retryCount: count [
 	count = 1
 		ifTrue: [ aBlock value: client ]
 		ifFalse: [ [ aBlock value: client ]
-				on: ZnHttpUnsuccessful
+				on: self connectivityErrors
 				do: [ :error | 
 					CurrentLogger value
 						logAsError:
-							( 'Consul Agent HTTP request failed: <1s>, retry count: <2p>' expandMacrosWith: error messageText with: count ).
+							( 'Consul Agent HTTP request failed: <1s>, retry count: <2p>'
+								expandMacrosWith: error messageText
+								with: count ).
 					self try: aBlock retryCount: count - 1
 					]
 			]
