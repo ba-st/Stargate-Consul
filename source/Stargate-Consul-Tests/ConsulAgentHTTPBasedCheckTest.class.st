@@ -49,7 +49,7 @@ ConsulAgentHTTPBasedCheckTest >> testAsJSONWhenHeadersArePresent [
 	self
 		assert: json Name equals: 'HTTP check';
 		assert: json Method equals: 'POST';
-		assert: json Header accept equals: 'application/json';
+		assert: json Header accept equals: #('application/json');
 		assert: json HTTP equals: 'http://api.example.com/';
 		assert: json Timeout equals: '1m30s';
 		assert: json Interval equals: '10s'
