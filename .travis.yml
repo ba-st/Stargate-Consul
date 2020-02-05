@@ -10,4 +10,8 @@ smalltalk:
 - Pharo32-7.0
 script:
   - smalltalkci
-  - docker-compose -f api-tests/docker-compose.yml up
+  - docker-compose -f api-tests/docker-compose.yml up -d
+  - curl --fail http://localhost:8080/echo/hello
+  - curl --fail http://localhost:8500/v1/agent/services
+  - curl --fail http://localhost:8500/v1/health/checks/echo
+  - docker-compose -f api-tests/docker-compose.yml down
