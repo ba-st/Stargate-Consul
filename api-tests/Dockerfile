@@ -16,8 +16,8 @@ RUN apt-get update \
     && rm --recursive --force /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /opt/Stargate-Consul-Example-API
-COPY start.sh .
-COPY health-check.sh .
+COPY start.sh ./
+COPY health-check.sh ./
 COPY --from=loader /opt/pharo/Pharo.image ./
 COPY --from=loader /opt/pharo/Pharo.changes ./
 COPY --from=loader /opt/pharo/Pharo*.sources ./
