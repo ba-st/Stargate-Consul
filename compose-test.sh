@@ -2,10 +2,10 @@
 
 set -e
 
-if [[ -z "${TRAVIS_PULL_REQUEST_BRANCH}" ]]; then
-  echo "BRANCH_NAME=${TRAVIS_BRANCH}" > .env
+if [[ -z "${GITHUB_HEAD_REF##*/}" ]]; then
+  echo "BRANCH_NAME=${GITHUB_REF##*/}" > .env
 else
-  echo "BRANCH_NAME=${TRAVIS_PULL_REQUEST_BRANCH}" > .env
+  echo "BRANCH_NAME=${GITHUB_HEAD_REF##*/}" > .env
 fi
 docker-compose -f api-tests/docker-compose.yml up -d
 sleep 10
