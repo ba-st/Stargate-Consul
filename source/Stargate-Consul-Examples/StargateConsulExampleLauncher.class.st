@@ -1,6 +1,6 @@
 Class {
 	#name : #StargateConsulExampleLauncher,
-	#superclass : #ApplicationStarterCommandLineHandler,
+	#superclass : #LaunchpadCommandLineHandler,
 	#instVars : [
 		'api',
 		'consulServiceDiscoveryIsEnabled'
