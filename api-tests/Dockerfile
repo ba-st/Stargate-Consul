@@ -25,7 +25,7 @@ COPY --from=loader /opt/pharo/Pharo*.sources ./
 RUN mkdir logs \
   && chmod a+x start.sh \
   && chmod a+x health-check.sh \
-  && chown --recursive pharo:pharo /opt/Stargate-Consul-Example-API
+  && chown --recursive pharo:users /opt/Stargate-Consul-Example-API
 
 USER pharo
 EXPOSE 8080
