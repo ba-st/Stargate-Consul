@@ -131,8 +131,8 @@ ConsulServiceDiscoveryPlugin >> newHttpClient [
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> registerToConsul: serviceDefinition [
 
-	^ self newHttpClient put: self baseAPILocation / 'register'
-		  contents: ( NeoJSONWriter toString: serviceDefinition )
+self newHttpClient put: self baseAPILocation / 'register'
+		contents: ( NeoJSONWriter toString: serviceDefinition )
 ]
 
 { #category : #private }
