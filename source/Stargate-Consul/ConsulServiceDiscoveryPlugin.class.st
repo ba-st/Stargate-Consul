@@ -66,6 +66,12 @@ ConsulServiceDiscoveryPlugin >> connectivityErrors [
 ]
 
 { #category : #private }
+ConsulServiceDiscoveryPlugin >> deregisterFromConsul: serviceDefinition [
+
+	^ self newHttpClient put: ( self deregistrationUrlFor: serviceDefinition ) contents: ''
+]
+
+{ #category : #private }
 ConsulServiceDiscoveryPlugin >> deregistrationUrlFor: serviceDefinition [
 
 	| serviceId |
@@ -73,6 +79,13 @@ ConsulServiceDiscoveryPlugin >> deregistrationUrlFor: serviceDefinition [
 	serviceId := serviceDefinition at: #ID ifAbsent: [ serviceDefinition Name ].
 
 	^ self baseAPILocation / ( 'deregister/<1s>' expandMacrosWith: serviceId )
+]
+
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> ignoreConnectivityErrorsDuring: aBlock [
+
+	aBlock on: self connectivityErrors
+		do: [ :error | error return ]
 ]
 
 { #category : #configuring }
@@ -86,57 +99,78 @@ ConsulServiceDiscoveryPlugin >> initializeReportingLifecycleOfAll: aServiceDefin
 	consulAgentLocation := aConsulAPIUrl
 ]
 
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> logDeregistrationFailedAtAttempt: attemptNumber dueTo: error [
+
+	CurrentLogger value logAsError:
+		( 'Attempt #<1p>/<2p> to deregister service in Consul Agent failed: <3s>' expandMacrosWith:
+			  attemptNumber
+			  with: self retryCount + 1
+			  with: error messageText )
+]
+
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> logRegistrationFailedAtAttempt: attemptNumber dueTo: error [
+
+	CurrentLogger value logAsError:
+		( 'Attempt #<1p>/<2p> to register service in Consul Agent failed: <3s>' expandMacrosWith:
+			  attemptNumber
+			  with: self retryCount + 1
+			  with: error messageText )
+]
+
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> newHttpClient [
+
+	^ ZnClient new
+		  beOneShot;
+		  enforceHttpSuccess: true;
+		  yourself
+]
+
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> registerToConsul: serviceDefinition [
+
+	^ self newHttpClient put: self baseAPILocation / 'register'
+		  contents: ( NeoJSONWriter toString: serviceDefinition )
+]
+
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> retryCount [
+
+	^ 2
+]
+
 { #category : #controlling }
 ConsulServiceDiscoveryPlugin >> startOn: teapotServer [
 
-	serviceDefinitions
-		do: [ :serviceDefinition | 
-			self
-				try: [ :client | 
-					client
-						put: self baseAPILocation / 'register'
-						contents: ( NeoJSONWriter toString: serviceDefinition )
-					]
-				retryCount: 3
-			]
+	serviceDefinitions do: [ :serviceDefinition | 
+		self try: [ self registerToConsul: serviceDefinition ]
+			onConnectivityErrorDo: [ :attemptNumber :error | 
+			self logRegistrationFailedAtAttempt: attemptNumber dueTo: error ]
+		]
 ]
 
 { #category : #controlling }
 ConsulServiceDiscoveryPlugin >> stop [
 
-	[ serviceDefinitions
-		do: [ :serviceDefinition | 
-			self
-				try: [ :client | client put: ( self deregistrationUrlFor: serviceDefinition ) contents: '' ]
-				retryCount: 3
+	self ignoreConnectivityErrorsDuring: [ 
+		"Since we are already stopping the API, just ignore it after the number of retries failed. 
+		Consul will figure out eventually that this service is dead."
+		serviceDefinitions do: [ :serviceDefinition | 
+			self try: [ self deregisterFromConsul: serviceDefinition ]
+				onConnectivityErrorDo: [ :attemptNumber :error | 
+				self logDeregistrationFailedAtAttempt: attemptNumber dueTo: error ]
 			]
-	]
-		on: self connectivityErrors
-		do: [ :error | "Since we are already stopping the API, just ignore it. 
-							Consul will figure out eventually that this service is dead." 
-							error return ]
+		]
 ]
 
 { #category : #private }
-ConsulServiceDiscoveryPlugin >> try: aBlock retryCount: count [
+ConsulServiceDiscoveryPlugin >> try: aBlock onConnectivityErrorDo: failBlock [
 
-	| client |
-
-	client := ZnClient new.
-	client
-		beOneShot;
-		enforceHttpSuccess: true.
-	count = 1
-		ifTrue: [ aBlock value: client ]
-		ifFalse: [ [ aBlock value: client ]
-				on: self connectivityErrors
-				do: [ :error | 
-					CurrentLogger value
-						logAsError:
-							( 'Consul Agent HTTP request failed: <1s>, retry count: <2p>'
-								expandMacrosWith: error messageText
-								with: count ).
-					self try: aBlock retryCount: count - 1
-					]
-			]
+	Retry value: aBlock configuredBy: [ :retry | 
+		retry
+			upTo: self retryCount;
+			on: self connectivityErrors evaluating: failBlock
+		]
 ]
