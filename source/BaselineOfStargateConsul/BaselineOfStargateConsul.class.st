@@ -39,6 +39,10 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
 
 	spec
+		baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v1' ];
+		project: 'Superluminal-Core' copyFrom: 'Superluminal' with: [ spec loads: 'Deployment' ].
+
+	spec
 		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v3/source' ];
 		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ]
 ]
@@ -47,7 +51,7 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 BaselineOfStargateConsul >> setUpPackages: spec [
 
 	spec
-		package: 'Stargate-Consul' with: [ spec requires: 'Stargate-Core' ];
+		package: 'Stargate-Consul' with: [ spec requires: #('Stargate-Core' 'Superluminal-Core') ];
 		group: 'Deployment' with: 'Stargate-Consul'.
 
 	spec

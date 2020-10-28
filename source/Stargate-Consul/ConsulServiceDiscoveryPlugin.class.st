@@ -68,7 +68,11 @@ ConsulServiceDiscoveryPlugin >> connectivityErrors [
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> deregisterFromConsul: serviceDefinition [
 
-	^ self newHttpClient put: ( self deregistrationUrlFor: serviceDefinition ) contents: ''
+	| deregisterRequest |
+
+	deregisterRequest := HttpRequest put: ( self deregistrationUrlFor: serviceDefinition )
+		                     configuredUsing: [ :request | request body json: {  } asDictionary ].
+	deregisterRequest applyOn: self newHttpClient
 ]
 
 { #category : #private }
@@ -131,8 +135,11 @@ ConsulServiceDiscoveryPlugin >> newHttpClient [
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> registerToConsul: serviceDefinition [
 
-self newHttpClient put: self baseAPILocation / 'register'
-		contents: ( NeoJSONWriter toString: serviceDefinition )
+	| registerRequest |
+
+	registerRequest := HttpRequest put: self baseAPILocation / 'register'
+		                   configuredUsing: [ :request | request body json: serviceDefinition ].
+	registerRequest applyOn: self newHttpClient
 ]
 
 { #category : #private }
