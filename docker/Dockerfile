@@ -24,7 +24,6 @@ COPY --from=loader /opt/pharo/Pharo.changes ./
 COPY --from=loader /opt/pharo/Pharo*.sources ./
 
 RUN mkdir logs \
-  && chmod a+x start.sh \
   && chmod a+x api-init.sh \
   && chmod a+x api-start.sh \
   && chmod a+x health-check.sh \
