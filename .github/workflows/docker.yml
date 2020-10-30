@@ -40,7 +40,7 @@ jobs:
       - name: Docker build and push
         uses: docker/build-push-action@v2
         env:
-          BRANCH_NAME: {{ steps.set-branch-name.outputs.BRANCH_NAME }}
+          BRANCH_NAME: ${{ steps.set-branch-name.outputs.BRANCH_NAME }}
         with:
           context: ./docker
           file: ./docker/Dockerfile
