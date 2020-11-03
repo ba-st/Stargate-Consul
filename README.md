@@ -13,8 +13,8 @@
 </p>
 
 [![GitHub release](https://img.shields.io/github/release/ba-st/Stargate-Consul.svg)](https://github.com/ba-st/Stargate-Consul/releases/latest)
-[![Build Status](https://travis-ci.com/ba-st/Stargate-Consul.svg?branch=release-candidate)](https://travis-ci.com/ba-st/Stargate-Consul)
-[![Coverage Status](https://coveralls.io/repos/github/ba-st/Stargate-Consul/badge.svg?branch=release-candidate)](https://coveralls.io/github/ba-st/Stargate-Consul?branch=release-candidate)
+[![Build Status](https://github.com/ba-st/Stargate-Consul/workflows/Build/badge.svg?branch=release-candidate)](https://github.com/ba-st/Stargate-Consul/actions?query=workflow%3ABuild)
+[![Coverage Status](https://codecov.io/github/ba-st/Stargate-Consul/coverage.svg?branch=release-candidate)](https://codecov.io/gh/ba-st/Stargate-Consul/branch/release-candidate)
 [![Pharo 7.0](https://img.shields.io/badge/Pharo-7.0-informational)](https://pharo.org)
 [![Pharo 8.0](https://img.shields.io/badge/Pharo-8.0-informational)](https://pharo.org)
 

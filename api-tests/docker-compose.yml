@@ -1,8 +1,8 @@
-version: "3.7"
+version: '3'
 services:
   api:
     build:
-      context: ./
+      context: ../docker/
       args:
         - BRANCH_NAME
     ports:
@@ -16,7 +16,7 @@ services:
     depends_on:
       - consul-agent
   consul-agent:
-    image: consul:1.6
+    image: consul:1.8
     ports:
       - "8500:8500"
       - "8600:8600"

@@ -29,11 +29,11 @@ StargateConsulExampleLauncher class >> logPrefix [
 { #category : #'private - accessing' }
 StargateConsulExampleLauncher >> apiConfiguration [
 
-	^ Array
-		with: #serverUrl -> self publicURL
-		with: #port -> ( self configuration at: 'port' )
-		with: #debugMode -> self isDebugModeEnabled
-		with: #operations -> self operationsConfiguration
+	^ Array 
+		  with: #serverUrl -> self publicURL
+		  with: #port -> self port
+		  with: #debugMode -> self isDebugModeEnabled
+		  with: #operations -> self operationsConfiguration
 ]
 
 { #category : #'private - accessing' }
@@ -71,23 +71,10 @@ StargateConsulExampleLauncher >> configurationDefinition [
 StargateConsulExampleLauncher >> consulServiceDiscoveryConfiguration [
 
 	^ Dictionary new
-		at: #enabled put: consulServiceDiscoveryIsEnabled;
-		at: #definitions
-			put:
-			{( ConsulServiceDefinitionBuilder new
-				addCheck:
-					( ConsulAgentHTTPBasedCheck
-						named: 'health-check'
-						executing: #POST
-						against: self publicURL / 'operations' asUrl / HealthCheckPlugin endpoint
-						withHeaders:
-							{ #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0'.
-							 #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken )}
-						every: 10 seconds
-						timeoutAfter: 1 minute );
-				buildNamed: 'echo' )};
-		at: #consulAgentLocation put: ( self configuration at: 'consul-agent-location' );
-		yourself
+		  at: #enabled put: consulServiceDiscoveryIsEnabled;
+		  at: #definitions put: { self serviceDefinition };
+		  at: #consulAgentLocation put: ( self configuration at: 'consul-agent-location' );
+		  yourself
 ]
 
 { #category : #configuring }
@@ -137,9 +124,43 @@ StargateConsulExampleLauncher >> operationsSecret [
 ]
 
 { #category : #'private - accessing' }
+StargateConsulExampleLauncher >> port [
+
+	^ self configuration at: 'port'
+]
+
+{ #category : #'private - accessing' }
 StargateConsulExampleLauncher >> publicURL [
 
 	^ self configuration at: 'public-URL'
+]
+
+{ #category : #'private - accessing' }
+StargateConsulExampleLauncher >> serviceDefinition [
+
+	| builder |
+
+	builder := ConsulServiceDefinitionBuilder new.
+	OSEnvironment current at: 'HOSTNAME'
+		ifPresent: [ :variable | "Inside Docker containers the HOSTNAME variable holds the container id"
+			builder
+				identifiedBy: ( 'echo-<1s>' expandMacrosWith: variable );
+				address: variable
+			].
+
+	builder port: self port.
+
+	^ builder
+		  addCheck: ( ConsulAgentHTTPBasedCheck
+				    named: 'health-check'
+				    executing: #POST
+				    against: self publicURL / 'operations' asUrl / HealthCheckPlugin endpoint
+				    withHeaders: { 
+						    ( #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0' ).
+						    ( #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken ) ) }
+				    every: 10 seconds
+				    timeoutAfter: 1 minute );
+		  buildNamed: 'echo'
 ]
 
 { #category : #'private - activation' }

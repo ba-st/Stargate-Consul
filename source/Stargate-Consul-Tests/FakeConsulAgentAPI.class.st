@@ -7,7 +7,9 @@ Class {
 	#instVars : [
 		'server',
 		'registeredServices',
-		'asserter'
+		'asserter',
+		'isFirstRegisterRequestReceived',
+		'isFirstDeregisterRequestReceived'
 	],
 	#category : #'Stargate-Consul-Tests'
 }
@@ -32,26 +34,44 @@ FakeConsulAgentAPI >> configureTeapotServerWith: configuration [
 { #category : #private }
 FakeConsulAgentAPI >> handleServiceDeregistration: request [
 
-	| serviceId |
+	"I will fail on purpose the first request to te be able to test the retry mechanics"
 
-	asserter assert: request method equals: #PUT.
-	serviceId := request at: #identifier.
-	registeredServices removeAllSuchThat: [ :service | service ID = serviceId ].
-	^ TeaResponse ok
+	^ isFirstDeregisterRequestReceived
+		  then: [ 
+			  isFirstDeregisterRequestReceived := false.
+			  TeaResponse serverError
+			  ]
+		  otherwise: [ 
+			  | serviceId |
+
+			  asserter assert: request method equals: #PUT.
+			  serviceId := request at: #identifier.
+			  registeredServices removeAllSuchThat: [ :service | service ID = serviceId ].
+			  TeaResponse ok
+			  ]
 ]
 
 { #category : #private }
 FakeConsulAgentAPI >> handleServiceRegistration: request [
 
-	| service |
+	"I will fail on purpose the first request to te be able to test the retry mechanics"
 
-	asserter
-		assert: request method equals: #PUT;
-		assert: request contents notEmpty.
-	service := NeoJSONObject fromString: request contents.
-	service at: #ID ifAbsentPut: [ service at: #Name ].
-	registeredServices add: service.
-	^ TeaResponse ok
+	^ isFirstRegisterRequestReceived
+		  then: [ 
+			  isFirstRegisterRequestReceived := false.
+			  TeaResponse serverError
+			  ]
+		  otherwise: [ 
+			  | service |
+
+			  asserter
+				  assert: request method equals: #PUT;
+				  assert: request contents notEmpty.
+			  service := NeoJSONObject fromString: request contents.
+			  service at: #ID ifAbsentPut: [ service at: #Name ].
+			  registeredServices add: service.
+			  TeaResponse ok
+			  ]
 ]
 
 { #category : #initialization }
@@ -59,6 +79,8 @@ FakeConsulAgentAPI >> initializeConfiguredBy: configuration on: aTestAsserter [
 
 	registeredServices := OrderedCollection new.
 	asserter := aTestAsserter.
+	isFirstRegisterRequestReceived := true.
+	isFirstDeregisterRequestReceived := true.
 	self configureTeapotServerWith: configuration
 ]
 
