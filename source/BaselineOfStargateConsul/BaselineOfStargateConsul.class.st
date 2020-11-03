@@ -30,7 +30,7 @@ BaselineOfStargateConsul >> projectClass [
 BaselineOfStargateConsul >> setUpDependencies: spec [
 
 	spec
-		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v5/source' ];
+		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v6' ];
 		project: 'Stargate-Core' copyFrom: 'Stargate' with: [ spec loads: 'Core' ];
 		project: 'Stargate-HealthCheck-Deployment'
 			copyFrom: 'Stargate'
@@ -39,7 +39,7 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
 
 	spec
-		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v3/source' ];
+		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v3' ];
 		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ]
 ]
 
