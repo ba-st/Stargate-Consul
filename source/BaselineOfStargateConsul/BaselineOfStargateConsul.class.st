@@ -30,7 +30,7 @@ BaselineOfStargateConsul >> projectClass [
 BaselineOfStargateConsul >> setUpDependencies: spec [
 
 	spec
-		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v6' ];
+		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v5' ];
 		project: 'Stargate-Core' copyFrom: 'Stargate' with: [ spec loads: 'Core' ];
 		project: 'Stargate-HealthCheck-Deployment'
 			copyFrom: 'Stargate'
