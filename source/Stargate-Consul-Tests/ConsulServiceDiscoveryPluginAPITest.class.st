@@ -8,16 +8,16 @@ Class {
 	#category : #'Stargate-Consul-Tests'
 }
 
-{ #category : #logging }
-ConsulServiceDiscoveryPluginAPITest class >> isLogging [
-
-	^ true
-]
-
 { #category : #private }
 ConsulServiceDiscoveryPluginAPITest >> consulAgentLocation [
 
 	^ 'http://localhost' asUrl port: consulAgentPort
+]
+
+{ #category : #logging }
+ConsulServiceDiscoveryPluginAPITest >> isLogging [
+
+	^ true
 ]
 
 { #category : #private }
