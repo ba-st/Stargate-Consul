@@ -45,7 +45,7 @@ ConsulServiceDefinitionBuilder >> addCheck: aConsulAgentCheck [
 
 	| checks |
 
-	checks := serviceDefinition at: 'Checks' ifAbsentPut: [ OrderedCollection new ].
+	checks := serviceDefinition at: #Checks ifAbsentPut: [ OrderedCollection new ].
 	checks add: aConsulAgentCheck
 ]
 
@@ -55,14 +55,14 @@ ConsulServiceDefinitionBuilder >> addTag: aString [
 	| tags |
 
 	AssertionChecker enforce: [ aString notEmpty ] because: 'A tag cannot be empty'.
-	tags := serviceDefinition at: 'Tags' ifAbsentPut: [ OrderedCollection new ].
+	tags := serviceDefinition at: #Tags ifAbsentPut: [ OrderedCollection new ].
 	tags add: aString
 ]
 
 { #category : #configuring }
-ConsulServiceDefinitionBuilder >> address: aString [ 
-	
-	serviceDefinition at: 'Address' put: aString
+ConsulServiceDefinitionBuilder >> address: aString [
+
+	serviceDefinition at: #Address put: aString
 ]
 
 { #category : #private }
@@ -77,21 +77,21 @@ ConsulServiceDefinitionBuilder >> assertIsValidPort: aPortNumber [
 ConsulServiceDefinitionBuilder >> buildNamed: aServiceName [
 
 	AssertionChecker enforce: [ aServiceName notEmpty ] because: 'A service name cannot be empty'.
-	serviceDefinition at: 'Name' put: aServiceName.
+	serviceDefinition at: #Name put: aServiceName.
 	^ NeoJSONObject newFrom: serviceDefinition
 ]
 
 { #category : #configuring }
 ConsulServiceDefinitionBuilder >> enableTagOverride [
 
-	serviceDefinition at: 'EnableTagOverride' put: true
+	serviceDefinition at: #EnableTagOverride put: true
 ]
 
 { #category : #configuring }
 ConsulServiceDefinitionBuilder >> identifiedBy: aString [
 
 	AssertionChecker enforce: [ aString notEmpty ] because: 'An ID cannot be empty'.
-	serviceDefinition at: 'ID' put: aString
+	serviceDefinition at: #ID put: aString
 ]
 
 { #category : #initialization }
@@ -104,14 +104,14 @@ ConsulServiceDefinitionBuilder >> initialize [
 { #category : #configuring }
 ConsulServiceDefinitionBuilder >> metadataAt: aKey put: aValue [
 
-	serviceDefinition at: 'Meta' at: aKey put: aValue
+	serviceDefinition at: #Meta at: aKey put: aValue
 ]
 
 { #category : #configuring }
 ConsulServiceDefinitionBuilder >> port: anInteger [
 
 	self assertIsValidPort: anInteger.
-	serviceDefinition at: 'Port' put: anInteger
+	serviceDefinition at: #Port put: anInteger
 ]
 
 { #category : #configuring }
@@ -126,7 +126,7 @@ ConsulServiceDefinitionBuilder >> taggedAddressesAt: aTag on: aKey put: aValue [
 	| taggedAddresses |
 
 	taggedAddresses := serviceDefinition
-		at: 'TaggedAddresses'
+		at: #TaggedAddresses
 		ifAbsentPut: [ serviceDefinition species new ].
 	taggedAddresses at: aTag at: aKey put: aValue
 ]

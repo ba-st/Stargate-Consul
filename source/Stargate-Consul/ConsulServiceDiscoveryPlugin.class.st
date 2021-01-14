@@ -72,7 +72,7 @@ ConsulServiceDiscoveryPlugin >> deregisterFromConsul: serviceDefinition [
 
 	deregisterRequest := HttpRequest
 		put: ( self deregistrationUrlFor: serviceDefinition )
-		configuredUsing: [ :request | request body json: {} asDictionary ].
+		configuredUsing: [ :request | request body json: Dictionary new ].
 	deregisterRequest applyOn: self newHttpClient
 ]
 
