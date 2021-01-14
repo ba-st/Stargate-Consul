@@ -2,7 +2,8 @@ Class {
 	#name : #ConsulServiceDiscoveryPluginInteractionTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'consulAgent'
+		'consulAgent',
+		'port'
 	],
 	#category : #'Stargate-Consul-Tests'
 }
@@ -16,24 +17,19 @@ ConsulServiceDiscoveryPluginInteractionTest >> apiServer [
 { #category : #accessing }
 ConsulServiceDiscoveryPluginInteractionTest >> baseUrl [
 
-	^ 'http://localhost' asUrl port: self port
-]
-
-{ #category : #accessing }
-ConsulServiceDiscoveryPluginInteractionTest >> port [
-
-	^ 9998
+	^ 'http://localhost' asUrl port: port
 ]
 
 { #category : #running }
 ConsulServiceDiscoveryPluginInteractionTest >> setUp [
 
 	super setUp.
+	port := self freeListeningTCPPort.
 	consulAgent := FakeConsulAgentAPI
 		configuredBy:
-			{( #port -> self port ).
-			( #serverUrl -> self baseUrl ).
-			( #debugMode -> true )}
+			{ #port -> port.
+			 #serverUrl -> self baseUrl.
+			 #debugMode -> true }
 		on: self.
 	consulAgent start
 ]

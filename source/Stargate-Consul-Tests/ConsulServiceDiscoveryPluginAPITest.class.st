@@ -2,7 +2,8 @@ Class {
 	#name : #ConsulServiceDiscoveryPluginAPITest,
 	#superclass : #OperationalPluginAPITest,
 	#instVars : [
-		'consulAgent'
+		'consulAgent',
+		'consulAgentPort'
 	],
 	#category : #'Stargate-Consul-Tests'
 }
@@ -10,7 +11,13 @@ Class {
 { #category : #private }
 ConsulServiceDiscoveryPluginAPITest >> consulAgentLocation [
 
-	^ 'http://localhost:9998' asUrl
+	^ 'http://localhost' asUrl port: consulAgentPort
+]
+
+{ #category : #logging }
+ConsulServiceDiscoveryPluginAPITest >> isLogging [
+
+	^ true
 ]
 
 { #category : #private }
@@ -33,6 +40,19 @@ ConsulServiceDiscoveryPluginAPITest >> requiredPermissions [
 ]
 
 { #category : #private }
+ConsulServiceDiscoveryPluginAPITest >> runCase [
+
+	| logs |
+
+	logs :=
+		String streamContents: [:stream |
+			CurrentLogger
+				value: (LeveledLogger outputTo: stream errorsTo: stream)
+				during: [super runCase]].
+	self logFailure: logs
+]
+
+{ #category : #private }
 ConsulServiceDiscoveryPluginAPITest >> serviceDefinitions [
 
 	^ { ConsulServiceDefinitionBuilder new buildNamed: 'test' }
@@ -41,9 +61,10 @@ ConsulServiceDiscoveryPluginAPITest >> serviceDefinitions [
 { #category : #tests }
 ConsulServiceDiscoveryPluginAPITest >> setUp [
 
+	consulAgentPort := self freeListeningTCPPort.
 	consulAgent := FakeConsulAgentAPI
 		configuredBy:
-			{( #port -> 9998 ).
+			{( #port -> consulAgentPort ).
 			( #serverUrl -> self consulAgentLocation ).
 			( #debugMode -> true )}
 		on: self.
