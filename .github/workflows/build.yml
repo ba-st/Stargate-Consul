@@ -19,8 +19,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         timeout-minutes: 15
+      - name: Set branch name
+        id: set-branch-name
+        run: |
+          if [[ -z "${GITHUB_HEAD_REF##*/}" ]]; then
+            echo "::set-output name=BRANCH_NAME::${GITHUB_REF##*/}"
+          else
+            echo "::set-output name=BRANCH_NAME::${GITHUB_HEAD_REF##*/}"
+          fi        
       - name: Run tests using Docker
         run: ./compose-test.sh
+        env:
+          BRANCH_NAME: ${{ steps.set-branch-name.outputs.BRANCH_NAME }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
