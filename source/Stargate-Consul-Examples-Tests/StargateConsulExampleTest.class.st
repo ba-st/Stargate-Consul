@@ -52,6 +52,12 @@ StargateConsulExampleTest >> tearDown [
 ]
 
 { #category : #tests }
+StargateConsulExampleTest >> testApplicationBaselineName [
+
+	self assert: StargateConsulExample applicationBaselineName equals: #BaselineOfStargateConsul
+]
+
+{ #category : #tests }
 StargateConsulExampleTest >> testPrintHelpOn [
 
 	| help |
