@@ -14,7 +14,7 @@ ConsulServiceDiscoveryPluginAPITest >> consulAgentLocation [
 	^ 'http://localhost' asUrl port: consulAgentPort
 ]
 
-{ #category : #logging }
+{ #category : #running }
 ConsulServiceDiscoveryPluginAPITest >> isLogging [
 
 	^ true
@@ -39,16 +39,16 @@ ConsulServiceDiscoveryPluginAPITest >> requiredPermissions [
 	^ #()
 ]
 
-{ #category : #private }
+{ #category : #running }
 ConsulServiceDiscoveryPluginAPITest >> runCase [
 
 	| logs |
-
-	logs :=
-		String streamContents: [:stream |
-			CurrentLogger
-				value: (LeveledLogger outputTo: stream errorsTo: stream)
-				during: [super runCase]].
+	logs := String streamContents: [ :stream | 
+		        | logger |
+		        logger := MemoryLogger new runDuring: [ super runCase ].
+		        logger recordings
+			        do: [ :event | stream nextPutAll: event printString ]
+			        separatedBy: [ stream cr ] ].
 	self logFailure: logs
 ]
 
@@ -58,7 +58,7 @@ ConsulServiceDiscoveryPluginAPITest >> serviceDefinitions [
 	^ { ConsulServiceDefinitionBuilder new buildNamed: 'test' }
 ]
 
-{ #category : #tests }
+{ #category : #running }
 ConsulServiceDiscoveryPluginAPITest >> setUp [
 
 	consulAgentPort := self freeListeningTCPPort.
@@ -72,7 +72,7 @@ ConsulServiceDiscoveryPluginAPITest >> setUp [
 	super setUp
 ]
 
-{ #category : #tests }
+{ #category : #running }
 ConsulServiceDiscoveryPluginAPITest >> tearDown [
 
 	super tearDown.
@@ -84,6 +84,6 @@ ConsulServiceDiscoveryPluginAPITest >> tearDown [
 ConsulServiceDiscoveryPluginAPITest >> testPluginIsEnabled [
 
 	self
-		assert: ( api isEnabled: ConsulServiceDiscoveryPlugin );
+		assertIsEnabled: ConsulServiceDiscoveryPlugin;
 		assert: consulAgent registeredServiceCount equals: 1
 ]

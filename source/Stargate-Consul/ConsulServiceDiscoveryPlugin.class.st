@@ -107,21 +107,21 @@ ConsulServiceDiscoveryPlugin >> initializeReportingLifecycleOfAll: aServiceDefin
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> logDeregistrationFailedAtAttempt: attemptNumber dueTo: error [
 
-	CurrentLogger value logAsError:
-		( 'Attempt #<1p>/<2p> to deregister service in Consul Agent failed: <3s>' expandMacrosWith:
-			  attemptNumber
-			  with: self retryCount + 1
-			  with: error messageText )
+	LaunchpadLogRecord emitError:
+		('Attempt #<1p>/<2p> to deregister service in Consul Agent failed: <3s>'
+			 expandMacrosWith: attemptNumber
+			 with: self retryCount + 1
+			 with: error messageText)
 ]
 
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> logRegistrationFailedAtAttempt: attemptNumber dueTo: error [
 
-	CurrentLogger value logAsError:
-		( 'Attempt #<1p>/<2p> to register service in Consul Agent failed: <3s>' expandMacrosWith:
-			  attemptNumber
-			  with: self retryCount + 1
-			  with: error messageText )
+	LaunchpadLogRecord emitError:
+		('Attempt #<1p>/<2p> to register service in Consul Agent failed: <3s>'
+			 expandMacrosWith: attemptNumber
+			 with: self retryCount + 1
+			 with: error messageText)
 ]
 
 { #category : #private }
