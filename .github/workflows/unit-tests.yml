@@ -1,4 +1,4 @@
-name: Build
+name: Unit Tests
 
 on: [push,pull_request,workflow_dispatch]
 
@@ -15,7 +15,7 @@ jobs:
         with:
           smalltalk-image: ${{ matrix.smalltalk }}
       - name: Load Image and Run Tests
-        run: smalltalkci -s ${{ matrix.smalltalk }}
+        run: smalltalkci -s ${{ matrix.smalltalk }} .smalltalkci/.unit-tests.ston
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         timeout-minutes: 15
