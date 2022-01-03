@@ -17,7 +17,8 @@ the package in your product baseline:
 
       spec
         baseline: 'StargateConsul'
-        with: [ spec repository: 'github://github://ba-st/Stargate-Consul:v{XX}' ];
+        with: [
+            spec repository: 'github://github://ba-st/Stargate-Consul:v{XX}' ];
         project: 'Stargate-Consul-Deployment'
         copyFrom: 'StargateConsul' with: [ spec loads: 'Deployment' ]
     ```
