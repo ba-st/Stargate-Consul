@@ -77,6 +77,9 @@ ConsulAwareStargateApplication >> consulServiceDiscoveryConfiguration [
 		  at: #enabled put: self isServiceDiscoveryThroughConsulEnabled;
 		  at: #definitions put: self serviceDefinitions;
 		  at: #consulAgentLocation put: self stargateConfiguration consulAgentLocation;
+		  at: #retry
+		  put: [ :retry | 
+			  retry backoffExponentiallyWithTimeSlot: self serviceDiscoveryTimeSlotBetweenRetries ];
 		  yourself
 ]
 
@@ -141,6 +144,12 @@ ConsulAwareStargateApplication >> serviceDiscoveryHealthCheckInterval [
 ConsulAwareStargateApplication >> serviceDiscoveryHealthCheckTimeout [
 
 	^ 1 minute
+]
+
+{ #category : #'private - accessing' }
+ConsulAwareStargateApplication >> serviceDiscoveryTimeSlotBetweenRetries [
+
+	^ 100 milliSeconds
 ]
 
 { #category : #'private - building' }

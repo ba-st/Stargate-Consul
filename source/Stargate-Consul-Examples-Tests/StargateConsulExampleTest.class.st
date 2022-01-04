@@ -58,6 +58,18 @@ StargateConsulExampleTest >> testApplicationBaselineName [
 ]
 
 { #category : #tests }
+StargateConsulExampleTest >> testDefaultServiceDiscoveryTimeSlotBetweenRetries [
+
+	self start: StargateConsulExample withAll: { 
+			'--stargate.public-url=http://localhost:<1p>' expandMacrosWith: port.
+			'--stargate.port=<1p>' expandMacrosWith: port.
+			'--stargate.operations-secret=secret'.
+			'--stargate.consul-agent-location=' }.
+
+	self assert: application serviceDiscoveryTimeSlotBetweenRetries equals: 100 milliSeconds 
+]
+
+{ #category : #tests }
 StargateConsulExampleTest >> testPrintHelpOn [
 
 	| help |

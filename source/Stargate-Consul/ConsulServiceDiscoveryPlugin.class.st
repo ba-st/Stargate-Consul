@@ -6,9 +6,8 @@ Class {
 	#name : #ConsulServiceDiscoveryPlugin,
 	#superclass : #OperationalPlugin,
 	#instVars : [
-		'serviceDefinitions',
-		'consulAgentLocation',
-		'apiClient'
+		'apiClient',
+		'options'
 	],
 	#category : #'Stargate-Consul'
 }
@@ -22,12 +21,7 @@ ConsulServiceDiscoveryPlugin class >> configureMediaControlsIn: builder within: 
 { #category : #'instance creation' }
 ConsulServiceDiscoveryPlugin class >> configuredBy: configuration [
 
-	| selfConfiguration |
-
-	selfConfiguration := self pluginConfigurationOn: configuration.
-	^ self
-		reportingLifecycleOfAll: ( selfConfiguration at: #definitions )
-		toAgentOn: ( selfConfiguration at: #consulAgentLocation ifAbsent: [ 'http://localhost:8500' asUrl ] )
+	^ self with: ( self pluginConfigurationOn: configuration )
 ]
 
 { #category : #accessing }
@@ -45,25 +39,34 @@ ConsulServiceDiscoveryPlugin class >> pluginName [
 { #category : #'instance creation' }
 ConsulServiceDiscoveryPlugin class >> reportingLifecycleOf: aServiceDefinition toAgentOn: aConsulAPIUrl [
 
-	^ self reportingLifecycleOfAll: ( Array with: aServiceDefinition ) toAgentOn: aConsulAPIUrl
+	^ self with: ( Dictionary new
+			    at: #definitions put: { aServiceDefinition };
+			    at: #consulAgentLocation put: aConsulAPIUrl;
+			    yourself )
 ]
 
-{ #category : #'instance creation' }
-ConsulServiceDiscoveryPlugin class >> reportingLifecycleOfAll: aServiceDefinitionCollection toAgentOn: aConsulAPIUrl [
+{ #category : #'private - instance creation' }
+ConsulServiceDiscoveryPlugin class >> with: options [
 
-	^ self new initializeReportingLifecycleOfAll: aServiceDefinitionCollection toAgentOn: aConsulAPIUrl
+	^self new initializeWith: options
 ]
 
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> baseAPILocation [
 
-	^ consulAgentLocation / 'v1/agent/service'
+	^ self consulAgentLocation / 'v1/agent/service'
 ]
 
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> connectivityErrors [
 
 	^ HTTPError , NetworkError
+]
+
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> consulAgentLocation [
+
+	^ ( options at: #consulAgentLocation ifAbsent: [ 'http://localhost:8500' ] ) asUrl
 ]
 
 { #category : #private }
@@ -97,10 +100,9 @@ ConsulServiceDiscoveryPlugin >> includeControllersIn: api [
 ]
 
 { #category : #initialization }
-ConsulServiceDiscoveryPlugin >> initializeReportingLifecycleOfAll: aServiceDefinitionCollection toAgentOn: aConsulAPIUrl [
+ConsulServiceDiscoveryPlugin >> initializeWith: configurationOptions [
 
-	serviceDefinitions := aServiceDefinitionCollection.
-	consulAgentLocation := aConsulAPIUrl.
+	options := configurationOptions.
 	apiClient := RESTfulAPIClient cachingOnLocalMemory
 ]
 
@@ -139,11 +141,18 @@ ConsulServiceDiscoveryPlugin >> retryCount [
 	^ 2
 ]
 
+{ #category : #private }
+ConsulServiceDiscoveryPlugin >> serviceDefinitions [
+
+	^ options at: #definitions
+]
+
 { #category : #controlling }
 ConsulServiceDiscoveryPlugin >> startOn: teapotServer [
 
-	serviceDefinitions do: [ :serviceDefinition | 
-		self try: [ self registerToConsul: serviceDefinition ]
+	self serviceDefinitions do: [ :serviceDefinition | 
+		self
+			try: [ self registerToConsul: serviceDefinition ]
 			onConnectivityErrorDo: [ :attemptNumber :error | 
 			self logRegistrationFailedAtAttempt: attemptNumber dueTo: error ]
 		]
@@ -155,8 +164,9 @@ ConsulServiceDiscoveryPlugin >> stop [
 	self ignoreConnectivityErrorsDuring: [ 
 		"Since we are already stopping the API, just ignore it after the number of retries failed. 
 		Consul will figure out eventually that this service is dead."
-		serviceDefinitions do: [ :serviceDefinition | 
-			self try: [ self deregisterFromConsul: serviceDefinition ]
+		self serviceDefinitions do: [ :serviceDefinition | 
+			self
+				try: [ self deregisterFromConsul: serviceDefinition ]
 				onConnectivityErrorDo: [ :attemptNumber :error | 
 				self logDeregistrationFailedAtAttempt: attemptNumber dueTo: error ]
 			]
@@ -169,6 +179,7 @@ ConsulServiceDiscoveryPlugin >> try: aBlock onConnectivityErrorDo: failBlock [
 	Retry value: aBlock configuredBy: [ :retry | 
 		retry
 			upTo: self retryCount;
-			on: self connectivityErrors evaluating: failBlock
+			on: self connectivityErrors evaluating: failBlock.
+		options at: #retry ifPresent: [ :action | action value: retry ]
 		]
 ]
