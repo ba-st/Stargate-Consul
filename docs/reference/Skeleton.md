@@ -8,7 +8,7 @@ and implement the additionally required subclass responsibilities:
 ```smalltalk
 serviceDefinitions
 
-  ^Array with: 
+  ^Array with:
     (self
       buildServiceDefinitionNamed: 'service'
       configuredBy: [ :builder | builder addTag: 'example' ])
