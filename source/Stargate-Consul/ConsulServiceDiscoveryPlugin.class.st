@@ -7,7 +7,8 @@ Class {
 	#superclass : #OperationalPlugin,
 	#instVars : [
 		'serviceDefinitions',
-		'consulAgentLocation'
+		'consulAgentLocation',
+		'apiClient'
 	],
 	#category : #'Stargate-Consul'
 }
@@ -62,18 +63,16 @@ ConsulServiceDiscoveryPlugin >> baseAPILocation [
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> connectivityErrors [
 
-	^ ZnHttpUnsuccessful , NetworkError
+	^ HTTPError , NetworkError
 ]
 
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> deregisterFromConsul: serviceDefinition [
 
-	| deregisterRequest |
-
-	deregisterRequest := HttpRequest
-		put: ( self deregistrationUrlFor: serviceDefinition )
-		configuredUsing: [ :request | request body json: Dictionary new ].
-	deregisterRequest applyOn: self newHttpClient
+	apiClient
+		putAt: ( self deregistrationUrlFor: serviceDefinition )
+		configuredBy: [ :request | request body json: Dictionary new ]
+		withSuccessfulResponseDo: [ :contents |  ]
 ]
 
 { #category : #private }
@@ -101,7 +100,8 @@ ConsulServiceDiscoveryPlugin >> includeControllersIn: api [
 ConsulServiceDiscoveryPlugin >> initializeReportingLifecycleOfAll: aServiceDefinitionCollection toAgentOn: aConsulAPIUrl [
 
 	serviceDefinitions := aServiceDefinitionCollection.
-	consulAgentLocation := aConsulAPIUrl
+	consulAgentLocation := aConsulAPIUrl.
+	apiClient := RESTfulAPIClient cachingOnLocalMemory
 ]
 
 { #category : #private }
@@ -125,23 +125,12 @@ ConsulServiceDiscoveryPlugin >> logRegistrationFailedAtAttempt: attemptNumber du
 ]
 
 { #category : #private }
-ConsulServiceDiscoveryPlugin >> newHttpClient [
-
-	^ ZnClient new
-		  beOneShot;
-		  enforceHttpSuccess: true;
-		  yourself
-]
-
-{ #category : #private }
 ConsulServiceDiscoveryPlugin >> registerToConsul: serviceDefinition [
 
-	| registerRequest |
-
-	registerRequest := HttpRequest
-		put: self baseAPILocation / 'register'
-		configuredUsing: [ :request | request body json: serviceDefinition ].
-	registerRequest applyOn: self newHttpClient
+	apiClient
+		putAt: self baseAPILocation / 'register'
+		configuredBy: [ :request | request body json: serviceDefinition ]
+		withSuccessfulResponseDo: [ :contents |  ]
 ]
 
 { #category : #private }
