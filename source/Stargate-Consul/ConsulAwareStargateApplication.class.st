@@ -10,14 +10,21 @@ ConsulAwareStargateApplication class >> isAbstract [
 	^ self = ConsulAwareStargateApplication
 ]
 
-{ #category : #'*Stargate-Consul' }
+{ #category : #private }
 ConsulAwareStargateApplication class >> stargateConfigurationParameters [
 
-	^ super stargateConfigurationParameters , { MandatoryConfigurationParameter
-		    named: 'Consul Agent Location'
-		    describedBy: 'Location of the Consul Agent. Leave empty to disable the plugin'
-		    inside: self sectionsForStargateConfiguration
-		    convertingWith: #asUrl }
+	^ super stargateConfigurationParameters , { 
+		  (MandatoryConfigurationParameter
+			   named: 'Consul Agent Location'
+			   describedBy:
+			   'Location of the Consul Agent. Leave empty to disable the plugin'
+			   inside: self sectionsForStargateConfiguration
+			   convertingWith: #asUrl).
+		  (OptionalConfigurationParameter
+			   named: 'Scheme'
+			   describedBy: 'Transport scheme. It''s used to configure Consul HTTP checks'
+			   inside: self sectionsForStargateConfiguration
+			   defaultingTo: 'http') }
 ]
 
 { #category : #'private - building' }
@@ -91,6 +98,7 @@ ConsulAwareStargateApplication >> healthCheckEndpoint [
 	baseUrl := self
 		           withDockerHostnameDo: [ :hostname | 
 			           ZnUrl new
+				           scheme: self stargateConfiguration scheme;
 				           host: hostname;
 				           port: self stargateConfiguration port;
 				           yourself
