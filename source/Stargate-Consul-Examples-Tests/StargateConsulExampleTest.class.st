@@ -79,7 +79,7 @@ StargateConsulExampleTest >> testPrintHelpOn [
 	self assert: help equals: ( 'NAME
 		stargate-consul-example [<1s>] - I provide a RESTful API over HTTP
 SYNOPSYS
-		stargate-consul-example --stargate.public-url=%<publicURL%> --stargate.port=%<port%> --stargate.operations-secret=%<operationsSecret%> --stargate.consul-agent-location=%<consulAgentLocation%>
+		stargate-consul-example --stargate.public-url=%<publicURL%> --stargate.port=%<port%> --stargate.operations-secret=%<operationsSecret%> --stargate.consul-agent-location=%<consulAgentLocation%> [--stargate.scheme=%<scheme%>]
 PARAMETERS
 		--stargate.public-url=%<publicURL%>
 			Public URL where the API is deployed. Used to create hypermedia links.
@@ -89,6 +89,8 @@ PARAMETERS
 			Secret key for checking JWT signatures.
 		--stargate.consul-agent-location=%<consulAgentLocation%>
 			Location of the Consul Agent. Leave empty to disable the plugin.
+		--stargate.scheme=%<scheme%>
+			Transport scheme. It''s used to configure Consul HTTP checks. Defaults to http.
 ENVIRONMENT
 		STARGATE__PUBLIC_URL
 			Public URL where the API is deployed. Used to create hypermedia links.
@@ -98,6 +100,8 @@ ENVIRONMENT
 			Secret key for checking JWT signatures.
 		STARGATE__CONSUL_AGENT_LOCATION
 			Location of the Consul Agent. Leave empty to disable the plugin.
+		STARGATE__SCHEME
+			Transport scheme. It''s used to configure Consul HTTP checks. Defaults to http.
 ' expandMacrosWith: StargateConsulExample version )
 ]
 
