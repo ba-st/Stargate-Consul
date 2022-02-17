@@ -11,9 +11,10 @@ docker-compose -f api-tests/docker-compose.yml up -d
 sleep 10
 curl --fail http://localhost:8080/echo/hello
 curl --fail http://localhost:8500/v1/agent/services
-HEALTH_STATUS=$(curl -s fail http://localhost:8500/v1/health/checks/echo | jq '.[0].Status')
+curl --fail http://localhost:8500/v1/health/checks/echo
+HEALTH_STATUS=$(curl -s http://localhost:8500/v1/health/checks/echo | jq '.[0].Status')
 if [ "$HEALTH_STATUS" != "passing" ]; then
-  echo "Echo service is unhealthy"
+  echo "ERROR: Echo service is unhealthy"
   docker-compose -f api-tests/docker-compose.yml down
   exit 1
 fi
