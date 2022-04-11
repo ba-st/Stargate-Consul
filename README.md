@@ -14,6 +14,7 @@ plugin to interact with the [Consul](https://www.consul.io) HTTP API.
 [![GitHub release](https://img.shields.io/github/release/ba-st/Stargate-Consul.svg)](https://github.com/ba-st/Stargate-Consul/releases/latest)
 [![Pharo 8.0](https://img.shields.io/badge/Pharo-8.0-informational)](https://pharo.org)
 [![Pharo 9.0](https://img.shields.io/badge/Pharo-9.0-informational)](https://pharo.org)
+[![Pharo 10](https://img.shields.io/badge/Pharo-10-informational)](https://pharo.org)
 
 Quick links
 
