@@ -45,7 +45,6 @@ jobs:
           context: ./
           file: ./docker/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          build-args: BRANCH_NAME=${{ steps.set-branch-name.outputs.BRANCH_NAME }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
