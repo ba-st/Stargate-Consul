@@ -2,11 +2,6 @@
 
 set -e
 
-if [[ -z "${GITHUB_HEAD_REF##*/}" ]]; then
-  echo "BRANCH_NAME=${GITHUB_REF##*/}" > .env
-else
-  echo "BRANCH_NAME=${GITHUB_HEAD_REF##*/}" > .env
-fi
 echo "Building API"
 docker-compose -f api-tests/docker-compose.yml build api
 echo "Starting Consul Agent"

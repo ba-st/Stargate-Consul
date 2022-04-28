@@ -14,7 +14,9 @@ jobs:
     name: Build and Publish Docker Images
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
       - name: Docker meta
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
@@ -40,10 +42,9 @@ jobs:
       - name: Docker build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./docker
+          context: ./
           file: ./docker/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          build-args: BRANCH_NAME=${{ steps.set-branch-name.outputs.BRANCH_NAME }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
