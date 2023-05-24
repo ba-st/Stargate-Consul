@@ -8,6 +8,7 @@ plugin to interact with the [Consul](https://www.consul.io) HTTP API.
 [![Unit Tests](https://github.com/ba-st/Stargate-Consul/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/unit-tests.yml)
 [![Coverage Status](https://codecov.io/github/ba-st/Stargate-Consul/coverage.svg?branch=release-candidate)](https://codecov.io/gh/ba-st/Stargate-Consul/branch/release-candidate)
 [![Baseline Groups](https://github.com/ba-st/Stargate-Consul/actions/workflows/loading-groups.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/loading-groups.yml)
+[![Integration Tests](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests.yml)
 [![Markdown Lint](https://github.com/ba-st/Stargate-Consul/actions/workflows/markdown-lint.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/markdown-lint.yml)
 [![Shellcheck](https://github.com/ba-st/Stargate-Consul/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/shellcheck.yml)
 
@@ -15,6 +16,7 @@ plugin to interact with the [Consul](https://www.consul.io) HTTP API.
 [![Pharo 8.0](https://img.shields.io/badge/Pharo-8.0-informational)](https://pharo.org)
 [![Pharo 9.0](https://img.shields.io/badge/Pharo-9.0-informational)](https://pharo.org)
 [![Pharo 10](https://img.shields.io/badge/Pharo-10-informational)](https://pharo.org)
+[![Pharo 11](https://img.shields.io/badge/Pharo-11-informational)](https://pharo.org)
 
 Quick links
 
@@ -32,7 +34,7 @@ API to register and deregister the configured services when the API starts/stops
 
 ## Installation
 
-To load the project in a Pharo image follow this [instructions](docs/how-to/how-to-load-in-pharo.md).
+To load the project in a Pharo image follow these [instructions](docs/how-to/how-to-load-in-pharo.md).
 
 ## Contributing
 

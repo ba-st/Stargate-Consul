@@ -3,12 +3,12 @@
 set -e
 
 echo "Building API"
-docker-compose -f api-tests/docker-compose.yml build api
+docker compose -f api-tests/docker-compose.yml build api
 echo "Starting Consul Agent"
-docker-compose -f api-tests/docker-compose.yml up -d consul-agent
+docker compose -f api-tests/docker-compose.yml up -d consul-agent
 sleep 1
 echo "Starting API"
-docker-compose -f api-tests/docker-compose.yml up -d api
+docker compose -f api-tests/docker-compose.yml up -d api
 sleep 10
 echo "Testing API"
 curl --fail http://localhost:8080/echo/hello
@@ -18,7 +18,7 @@ HEALTH_STATUS=$(curl -s http://localhost:8500/v1/health/checks/echo | jq '.[0].S
 echo "$HEALTH_STATUS"
 if [ "$HEALTH_STATUS" != '"passing"' ]; then
   echo "Error: Echo service is unhealthy" >&2
-  docker-compose -f api-tests/docker-compose.yml down
+  docker compose -f api-tests/docker-compose.yml down
   exit 1
 fi
-docker-compose -f api-tests/docker-compose.yml down
+docker compose -f api-tests/docker-compose.yml down
