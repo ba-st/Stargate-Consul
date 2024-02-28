@@ -1,0 +1,20 @@
+RwSimpleProjectLoadComponentV2 {
+  #name : 'Deployment',
+  #projectNames : [
+    'Stargate',
+    'Superluminal'
+   ],
+  #componentNames : [ ],
+  #packageNames : [
+    'Stargate-Consul'
+   ],
+  #conditionalPackageMapSpecs : {
+    'gemstone' : {
+      'allusers' : {
+        #packageNameToPlatformPropertiesMap : {
+          'Stargate-Consul' : { 'symbolDictName' : 'Stargate' }
+        }
+      }
+    }
+  }
+}

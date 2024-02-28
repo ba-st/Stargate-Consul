@@ -1,0 +1,9 @@
+RwLoadSpecificationV2 {
+  #specName: 'Stargate-Consul-Deployment',
+  #projectName : 'Stargate-Consul',
+  #diskUrl : 'Stargate-Consul',
+  #projectSpecFile : 'rowan/project.ston',
+  #componentNames : [
+    'Deployment'
+  ]
+}
