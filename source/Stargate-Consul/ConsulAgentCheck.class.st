@@ -13,7 +13,7 @@ ConsulAgentCheck >> asDictionary [
 
 	^ Dictionary new
 		at: 'Name' put: self name;
-		at: 'Interval' put: ( self asGoTimeFormat: self invokationInterval );
+		at: 'Interval' put: ( self asGoTimeFormat: self invocationInterval );
 		yourself
 ]
 
@@ -36,7 +36,7 @@ ConsulAgentCheck >> asGoTimeFormat: aDuration [
 ]
 
 { #category : #accessing }
-ConsulAgentCheck >> invokationInterval [
+ConsulAgentCheck >> invocationInterval [
 
 	^ self subclassResponsibility
 ]
