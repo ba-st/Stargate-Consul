@@ -52,12 +52,6 @@ StargateConsulExampleTest >> tearDown [
 ]
 
 { #category : #tests }
-StargateConsulExampleTest >> testApplicationBaselineName [
-
-	self assert: StargateConsulExample applicationBaselineName equals: #BaselineOfStargateConsul
-]
-
-{ #category : #tests }
 StargateConsulExampleTest >> testDefaultServiceDiscoveryTimeSlotBetweenRetries [
 
 	self start: StargateConsulExample withAll: { 
@@ -103,6 +97,14 @@ ENVIRONMENT
 		STARGATE__SCHEME
 			Transport scheme. It''s used to configure Consul HTTP checks. Defaults to http.
 ' expandMacrosWith: StargateConsulExample version )
+]
+
+{ #category : #tests }
+StargateConsulExampleTest >> testProjectName [
+
+	self
+		assert: StargateConsulExample projectName
+		equals: 'StargateConsul'
 ]
 
 { #category : #tests }
