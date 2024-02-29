@@ -28,7 +28,7 @@ ConsulAgentCheck >> asGoTimeFormat: aDuration [
 			self
 				nextPut: aDuration hours of: 'h' in: stream;
 				nextPut: aDuration minutes of: 'm' in: stream;
-				nextPut: aDuration seconds of: 's' in: stream;
+				nextPut: aDuration asSeconds of: 's' in: stream;
 				nextPut: aDuration wholeMilliseconds of: 'ms' in: stream;
 				nextPut: aDuration wholeMicroseconds of: 'us' in: stream;
 				nextPut: aDuration wholeNanoseconds of: 'ns' in: stream
