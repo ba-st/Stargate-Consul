@@ -47,7 +47,7 @@ StargateConsulExampleTest >> start: aLaunchpadApplication withAll: arguments [
 { #category : #running }
 StargateConsulExampleTest >> tearDown [
 
-	application ifNotNil: #stop.
+	application ifNotNil: [ application stop ].
 	super tearDown
 ]
 
