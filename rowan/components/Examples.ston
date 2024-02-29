@@ -1,0 +1,19 @@
+RwSimpleProjectLoadComponentV2 {
+  #name : 'Examples',
+  #projectNames : [ ],
+  #componentNames : [
+    'Deployment'
+   ],
+  #packageNames : [
+    'Stargate-Consul-Examples'
+   ],
+  #conditionalPackageMapSpecs : {
+    'gemstone' : {
+      'allusers' : {
+        #packageNameToPlatformPropertiesMap : {
+          'Stargate-Consul-Examples' : { 'symbolDictName' : 'Stargate' }
+        }
+      }
+    }
+  }
+}

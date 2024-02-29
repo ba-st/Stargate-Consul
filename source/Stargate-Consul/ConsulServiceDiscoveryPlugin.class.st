@@ -109,7 +109,7 @@ ConsulServiceDiscoveryPlugin >> initializeWith: configurationOptions [
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> logDeregistrationFailedAtAttempt: attemptNumber dueTo: error [
 
-	LaunchpadLogRecord emitError:
+	LogRecord emitError:
 		('Attempt #<1p>/<2p> to deregister service in Consul Agent failed: <3s>'
 			 expandMacrosWith: attemptNumber
 			 with: self retryCount + 1
@@ -119,7 +119,7 @@ ConsulServiceDiscoveryPlugin >> logDeregistrationFailedAtAttempt: attemptNumber 
 { #category : #private }
 ConsulServiceDiscoveryPlugin >> logRegistrationFailedAtAttempt: attemptNumber dueTo: error [
 
-	LaunchpadLogRecord emitError:
+	LogRecord emitError:
 		('Attempt #<1p>/<2p> to register service in Consul Agent failed: <3s>'
 			 expandMacrosWith: attemptNumber
 			 with: self retryCount + 1

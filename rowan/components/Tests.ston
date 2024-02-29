@@ -1,0 +1,24 @@
+RwSimpleProjectLoadComponentV2 {
+  #name : 'Tests',
+  #condition : 'tests',
+  #projectNames : [ ],
+  #componentNames : [
+    'Deployment',
+    'Examples'
+  ],
+  #packageNames : [
+    'Stargate-Consul-Tests',
+    'Stargate-Consul-Examples-Tests'
+
+  ],
+  #conditionalPackageMapSpecs : {
+    'gemstone' : {
+      'allusers' : {
+        #packageNameToPlatformPropertiesMap : {
+          'Stargate-Consul-Tests' : { 'symbolDictName' : 'Stargate' },
+          'Stargate-Consul-Examples-Tests' : { 'symbolDictName' : 'Stargate' }
+        }
+      }
+    }
+  }
+}

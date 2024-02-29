@@ -35,21 +35,22 @@ ConsulAgentHTTPBasedCheckTest >> testAsJSON [
 ConsulAgentHTTPBasedCheckTest >> testAsJSONWhenHeadersArePresent [
 
 	| check json |
-
 	check := ConsulAgentHTTPBasedCheck
-		named: 'HTTP check'
-		executing: #POST
-		against: 'http://api.example.com' asUrl
-		withHeaders: { #accept -> ZnMimeType applicationJson }
-		every: 10 seconds
-		timeoutAfter: 1.5 minutes.
+		         named: 'HTTP check'
+		         executing: #POST
+		         against: 'http://api.example.com' asUrl
+		         withHeaders: { #accept -> ZnMimeType applicationJson }
+		         every: 10 seconds
+		         timeoutAfter: 1.5 minutes.
 
-	json := NeoJSONObject fromString: ( NeoJSONWriter toStringPretty: check ).
+	json := NeoJSONObject fromString:
+		        (NeoJSONWriter toStringPretty: check).
 
 	self
 		assert: json Name equals: 'HTTP check';
 		assert: json Method equals: 'POST';
-		assert: json Header accept equals: #('application/json');
+		withTheOnlyOneIn: json Header accept
+		do: [ :header | self assert: header equals: 'application/json' ];
 		assert: json HTTP equals: 'http://api.example.com/';
 		assert: json Timeout equals: '1m30s';
 		assert: json Interval equals: '10s'

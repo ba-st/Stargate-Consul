@@ -118,7 +118,7 @@ ConsulAwareStargateApplication >> healthCheckToken [
 	jws payload: ( JWTClaimsSet new
 			  permissions: #( 'execute:health-check' );
 			  yourself ).
-	jws key: self stargateConfiguration operationsSecret.
+	jws symmetricKey: self stargateConfiguration operationsSecret.
 	^ jws compactSerialized
 ]
 
@@ -162,8 +162,10 @@ ConsulAwareStargateApplication >> serviceDiscoveryTimeSlotBetweenRetries [
 
 { #category : #'private - building' }
 ConsulAwareStargateApplication >> withDockerHostnameDo: aFoundBlock ifAbsent: aNotFoundBlock [
-
 	"Inside Docker containers the HOSTNAME variable holds the container id"
 
-	^ OSEnvironment current at: 'HOSTNAME' ifPresent: aFoundBlock ifAbsent: aNotFoundBlock
+	^ LanguagePlatform current os
+		  environmentAt: 'HOSTNAME'
+		  ifPresent: aFoundBlock
+		  ifAbsent: aNotFoundBlock
 ]

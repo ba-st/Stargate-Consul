@@ -12,7 +12,7 @@ Class {
 		'shell',
 		'arguments',
 		'containerId',
-		'invokationInterval'
+		'invocationInterval'
 	],
 	#category : #'Stargate-Consul'
 }
@@ -57,13 +57,13 @@ ConsulAgentDockerBasedCheck >> initializeNamed: aName executing: aCommand withAr
 	shell := aCommand.
 	arguments := anArgumentArray.
 	containerId := aContainerId.
-	invokationInterval := aDuration
+	invocationInterval := aDuration
 ]
 
 { #category : #accessing }
-ConsulAgentDockerBasedCheck >> invokationInterval [
+ConsulAgentDockerBasedCheck >> invocationInterval [
 
-	^ invokationInterval
+	^ invocationInterval
 ]
 
 { #category : #accessing }

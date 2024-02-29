@@ -7,20 +7,14 @@ RUN pharo metacello install gitlocal://. \
   BaselineOfStargateConsul --groups=Examples
 
 # Stage 2: Copy the resulting Pharo.image
-FROM ghcr.io/ba-st/launchpad:v4
+FROM ghcr.io/ba-st/launchpad:v5
 
-USER root
+COPY --from=loader --chown=pharo:users --chmod=755 /opt/pharo/pharo-local/iceberg/ba-st/Stargate/docker/health-check.sh ./
+COPY --from=loader --chown=pharo:users /opt/pharo/Pharo.image ./
+COPY --from=loader --chown=pharo:users /opt/pharo/Pharo.changes ./
+COPY --from=loader --chown=pharo:users /opt/pharo/Pharo*.sources ./
 
-COPY --from=loader /opt/pharo/pharo-local/iceberg/ba-st/Stargate/docker/health-check.sh ./
-COPY --from=loader /opt/pharo/Pharo.image ./
-COPY --from=loader /opt/pharo/Pharo.changes ./
-COPY --from=loader /opt/pharo/Pharo*.sources ./
-
-RUN mkdir logs \
-  && chmod a+x health-check.sh \
-  && chown --recursive pharo:users /opt/pharo
-
-USER pharo
+RUN mkdir logs
 
 HEALTHCHECK CMD ./health-check.sh
 

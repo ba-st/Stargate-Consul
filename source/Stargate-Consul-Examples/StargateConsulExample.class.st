@@ -4,12 +4,6 @@ Class {
 	#category : #'Stargate-Consul-Examples'
 }
 
-{ #category : #private }
-StargateConsulExample class >> applicationBaselineName [
-
-	^ #BaselineOfStargateConsul
-]
-
 { #category : #accessing }
 StargateConsulExample class >> commandName [
 
@@ -27,6 +21,12 @@ StargateConsulExample class >> initialize [
 
 	<ignoreForCoverage>
 	self initializeVersion
+]
+
+{ #category : #private }
+StargateConsulExample class >> projectName [
+
+	^ 'Stargate-Consul'
 ]
 
 { #category : #'private - accessing' }

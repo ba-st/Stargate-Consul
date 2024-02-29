@@ -11,20 +11,22 @@ Class {
 ConsulAgentDockerBasedCheckTest >> testAsJSON [
 
 	| check json |
-
 	check := ConsulAgentDockerBasedCheck
-		named: 'Check memory'
-		executing: '/bin/bash'
-		withArguments: #('/usr/local/bin/check-memory.sh')
-		inContainer: 'f972c95ebf0e'
-		every: 10 seconds.
+		         named: 'Check memory'
+		         executing: '/bin/bash'
+		         withArguments: #( '/usr/local/bin/check-memory.sh' )
+		         inContainer: 'f972c95ebf0e'
+		         every: 10 seconds.
 
-	json := NeoJSONObject fromString: ( NeoJSONWriter toStringPretty: check ).
+	json := NeoJSONObject fromString:
+		        (NeoJSONWriter toStringPretty: check).
 
 	self
 		assert: json Name equals: 'Check memory';
 		assert: json Shell equals: '/bin/bash';
-		assert: json Args equals: #('/usr/local/bin/check-memory.sh');
+		withTheOnlyOneIn: json Args
+		do: [ :arg |
+			self assert: arg equals: '/usr/local/bin/check-memory.sh' ];
 		assert: json DockerContainerID equals: 'f972c95ebf0e';
 		assert: json Interval equals: '10s'
 ]

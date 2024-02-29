@@ -13,7 +13,7 @@ ConsulAgentCheck >> asDictionary [
 
 	^ Dictionary new
 		at: 'Name' put: self name;
-		at: 'Interval' put: ( self asGoTimeFormat: self invokationInterval );
+		at: 'Interval' put: ( self asGoTimeFormat: self invocationInterval );
 		yourself
 ]
 
@@ -28,7 +28,7 @@ ConsulAgentCheck >> asGoTimeFormat: aDuration [
 			self
 				nextPut: aDuration hours of: 'h' in: stream;
 				nextPut: aDuration minutes of: 'm' in: stream;
-				nextPut: aDuration seconds of: 's' in: stream;
+				nextPut: aDuration seconds truncated of: 's' in: stream;
 				nextPut: aDuration wholeMilliseconds of: 'ms' in: stream;
 				nextPut: aDuration wholeMicroseconds of: 'us' in: stream;
 				nextPut: aDuration wholeNanoseconds of: 'ns' in: stream
@@ -36,7 +36,7 @@ ConsulAgentCheck >> asGoTimeFormat: aDuration [
 ]
 
 { #category : #accessing }
-ConsulAgentCheck >> invokationInterval [
+ConsulAgentCheck >> invocationInterval [
 
 	^ self subclassResponsibility
 ]

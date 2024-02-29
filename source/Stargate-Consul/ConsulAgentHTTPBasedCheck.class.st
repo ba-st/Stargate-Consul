@@ -9,8 +9,8 @@ Class {
 		'url',
 		'method',
 		'headers',
-		'invokationInterval',
-		'timeout'
+		'timeout',
+		'invocationInterval'
 	],
 	#category : #'Stargate-Consul'
 }
@@ -74,14 +74,14 @@ ConsulAgentHTTPBasedCheck >> initializeNamed: aName executing: anHttpMethod agai
 	method := anHttpMethod.
 	url := anUrl.
 	self initializeHeadersBasedOn: aHeaderCollection.
-	invokationInterval := aDuration.
+	invocationInterval := aDuration.
 	timeout := timeoutDuration
 ]
 
 { #category : #accessing }
-ConsulAgentHTTPBasedCheck >> invokationInterval [
+ConsulAgentHTTPBasedCheck >> invocationInterval [
 
-	^ invokationInterval
+	^ invocationInterval
 ]
 
 { #category : #accessing }
