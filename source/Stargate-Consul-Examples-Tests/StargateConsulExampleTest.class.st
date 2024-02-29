@@ -70,33 +70,7 @@ StargateConsulExampleTest >> testPrintHelpOn [
 
 	help := String streamContents: [ :stream | StargateConsulExample printHelpOn: stream ].
 
-	self assert: help equals: ( 'NAME
-		stargate-consul-example [<1s>] - I provide a RESTful API over HTTP
-SYNOPSYS
-		stargate-consul-example --stargate.public-url=%<publicURL%> --stargate.port=%<port%> --stargate.operations-secret=%<operationsSecret%> --stargate.consul-agent-location=%<consulAgentLocation%> [--stargate.scheme=%<scheme%>]
-PARAMETERS
-		--stargate.public-url=%<publicURL%>
-			Public URL where the API is deployed. Used to create hypermedia links.
-		--stargate.port=%<port%>
-			Listening port.
-		--stargate.operations-secret=%<operationsSecret%>
-			Secret key for checking JWT signatures.
-		--stargate.consul-agent-location=%<consulAgentLocation%>
-			Location of the Consul Agent. Leave empty to disable the plugin.
-		--stargate.scheme=%<scheme%>
-			Transport scheme. It''s used to configure Consul HTTP checks. Defaults to http.
-ENVIRONMENT
-		STARGATE__PUBLIC_URL
-			Public URL where the API is deployed. Used to create hypermedia links.
-		STARGATE__PORT
-			Listening port.
-		STARGATE__OPERATIONS_SECRET
-			Secret key for checking JWT signatures.
-		STARGATE__CONSUL_AGENT_LOCATION
-			Location of the Consul Agent. Leave empty to disable the plugin.
-		STARGATE__SCHEME
-			Transport scheme. It''s used to configure Consul HTTP checks. Defaults to http.
-' expandMacrosWith: StargateConsulExample version )
+	self assert: help equals: ( 'NAME<r><t><t>stargate-consul-example [<1s>] - I provide a RESTful API over HTTP<r>SYNOPSYS<r><t><t>stargate-consul-example --stargate.public-url=%<publicURL%> --stargate.port=%<port%> --stargate.operations-secret=%<operationsSecret%> --stargate.consul-agent-location=%<consulAgentLocation%> [--stargate.scheme=%<scheme%>]<r>PARAMETERS<r><t><t>--stargate.public-url=%<publicURL%><r><t><t><t>Public URL where the API is deployed. Used to create hypermedia links.<r><t><t>--stargate.port=%<port%><r><t><t><t>Listening port.<r><t><t>--stargate.operations-secret=%<operationsSecret%><r><t><t><t>Secret key for checking JWT signatures.<r><t><t>--stargate.consul-agent-location=%<consulAgentLocation%><r><t><t><t>Location of the Consul Agent. Leave empty to disable the plugin.<r><t><t>--stargate.scheme=%<scheme%><r><t><t><t>Transport scheme. It''s used to configure Consul HTTP checks. Defaults to http.<r>ENVIRONMENT<r><t><t>STARGATE__PUBLIC_URL<r><t><t><t>Public URL where the API is deployed. Used to create hypermedia links.<r><t><t>STARGATE__PORT<r><t><t><t>Listening port.<r><t><t>STARGATE__OPERATIONS_SECRET<r><t><t><t>Secret key for checking JWT signatures.<r><t><t>STARGATE__CONSUL_AGENT_LOCATION<r><t><t><t>Location of the Consul Agent. Leave empty to disable the plugin.<r><t><t>STARGATE__SCHEME<r><t><t><t>Transport scheme. It''s used to configure Consul HTTP checks. Defaults to http.<r>' expandMacrosWith: StargateConsulExample version )
 ]
 
 { #category : #tests }
