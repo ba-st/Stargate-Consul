@@ -104,7 +104,7 @@ StargateConsulExampleTest >> testProjectName [
 
 	self
 		assert: StargateConsulExample projectName
-		equals: 'StargateConsul'
+		equals: 'Stargate-Consul'
 ]
 
 { #category : #tests }

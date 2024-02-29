@@ -26,7 +26,7 @@ StargateConsulExample class >> initialize [
 { #category : #private }
 StargateConsulExample class >> projectName [
 
-	^ 'StargateConsul'
+	^ 'Stargate-Consul'
 ]
 
 { #category : #'private - accessing' }
