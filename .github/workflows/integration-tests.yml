@@ -11,5 +11,5 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - name: Run tests using Docker
+      - name: Run Pharo tests using Docker
         run: ./compose-test.sh
