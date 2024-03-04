@@ -1,0 +1,41 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ../../
+      dockerfile: docker/gs64/Dockerfile
+    cap_add:
+      - CAP_SYS_RESOURCE
+    ports:
+      - "8080:8080"
+    environment:
+      STARGATE__PUBLIC_URL: http://api:8080
+      STARGATE__PORT: 8080
+      STARGATE__OPERATIONS_SECRET: API-tests
+      HEALTH_CHECK_TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6WyJleGVjdXRlOmhlYWx0aC1jaGVjayJdfQ.gLammIebJuNDYDz70T8ZYK9GV8jXWrt18mPnLPvoCjw
+      STARGATE__CONSUL_AGENT_LOCATION: http://consul-agent:8500
+      GS64_STONE_HOSTNAME: stone
+      TZ: America/Argentina/Buenos_Aires
+    volumes:
+     - api-tests/gs64/gem.conf:/opt/gemstone/conf.gem.conf
+    depends_on:
+      - consul-agent
+      - stone
+  stone:
+    init: true
+    image: ghcr.io/ba-st/gs64-rowan:v3.7.0
+    cap_add:
+      - CAP_SYS_RESOURCE
+    environment:
+      TZ: America/Argentina/Buenos_Aires
+    volumes:
+     - api-tests/gs64/gem.conf:/opt/gemstone/conf.gem.conf
+     - api-tests/gs64/gemstone.key:/opt/gemstone/product/sys/gemstone.key:ro
+  consul-agent:
+    image: consul:1.8
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+      - "8300:8300"
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
