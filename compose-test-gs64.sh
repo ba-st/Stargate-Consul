@@ -9,6 +9,8 @@ docker compose -f api-tests/gs64/docker-compose.yml up -d stone
 echo "Starting Consul Agent"
 docker compose -f api-tests/gs64/docker-compose.yml up -d consul-agent
 sleep 2
+echo "Installing support code"
+docker exec -i -u gemstone gs64-stone-1 ./load-rowan-project.sh Stargate-Consul Stargate-Consul-Examples
 echo "Starting API"
 docker compose -f api-tests/gs64/docker-compose.yml up -d api
 sleep 10

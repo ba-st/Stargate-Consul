@@ -17,7 +17,7 @@ services:
       GS64_STONE_HOSTNAME: stone
       TZ: America/Argentina/Buenos_Aires
     volumes:
-     - api-tests/gs64/gem.conf:/opt/gemstone/conf.gem.conf
+     - ./gem.conf:/opt/gemstone/conf.gem.conf
     depends_on:
       - consul-agent
       - stone
@@ -29,8 +29,9 @@ services:
     environment:
       TZ: America/Argentina/Buenos_Aires
     volumes:
-     - api-tests/gs64/gem.conf:/opt/gemstone/conf.gem.conf
-     - api-tests/gs64/gemstone.key:/opt/gemstone/product/sys/gemstone.key:ro
+     - ./gem.conf:/opt/gemstone/conf/gem.conf
+     - ./gemstone.key:/opt/gemstone/product/sys/gemstone.key:ro
+     - $PWD:/opt/gemstone/projects/Stargate-Consul
   consul-agent:
     image: consul:1.8
     ports:
