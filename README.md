@@ -11,7 +11,9 @@ plugin to interact with the [Consul](https://www.consul.io) HTTP API.
 
 [![Baseline Groups](https://github.com/ba-st/Stargate-Consul/actions/workflows/loading-groups.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/loading-groups.yml)
 [![GS64 Components](https://github.com/ba-st/Stargate-Consul/actions/workflows/loading-gs64-components.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/loading-gs64-components.yml)
-[![Integration Tests](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests.yml)
+[![Pharo - Integration Tests](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests.yml)
+[![GS64 - Integration Tests](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests-gs64.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/integration-tests-gs64.yml)
+
 [![Markdown Lint](https://github.com/ba-st/Stargate-Consul/actions/workflows/markdown-lint.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/markdown-lint.yml)
 [![Shellcheck](https://github.com/ba-st/Stargate-Consul/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/ba-st/Stargate-Consul/actions/workflows/shellcheck.yml)
 

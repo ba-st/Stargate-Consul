@@ -1,0 +1,23 @@
+name: Integration Tests GS64
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+jobs:
+   integration-tests:
+    runs-on: ubuntu-latest
+    name: Integration Tests GS64
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Configure keyfile
+        run: |
+          echo "$GS_KEYFILE" > ./api-tests/gs64/gemstone.key
+        env:
+          GS_KEYFILE: ${{ secrets.GS_KEYFILE }}
+      - name: Run GS64 tests using Docker
+        run: ./compose-test-gs64.sh
+      - name: Remove keyfile
+        if: always()
+        run: rm -f ./api-tests/gs64/gemstone.key
