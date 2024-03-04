@@ -12,4 +12,4 @@ jobs:
         with:
           fetch-depth: 2
       - name: Run Pharo tests using Docker
-        run: ./compose-test.sh
+        run: ./compose-test-pharo.sh
