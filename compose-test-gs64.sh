@@ -2,7 +2,14 @@
 
 set -e
 
-readonly GS64_COMPOSE_FILE="api-tests/gs64/docker-compose.yml"
+if [ $# -eq 0 ]; then
+  print_error "Missing GS64 version argument. Eg. 3.7.0"
+  exit 1
+fi
+
+readonly GS64_VERSION="$1"
+readonly GS64_COMPOSE_FILE="api-tests/gs64-$GS64_VERSION/docker-compose.yml"
+
 echo "Building API"
 docker compose -f "$GS64_COMPOSE_FILE" build api
 echo "Starting Stone"

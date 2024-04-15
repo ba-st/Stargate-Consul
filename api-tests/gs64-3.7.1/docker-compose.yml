@@ -3,7 +3,7 @@ services:
   api:
     build:
       context: ../../
-      dockerfile: docker/gs64-${GS64_VERSION}/Dockerfile
+      dockerfile: docker/gs64-3.7.1/Dockerfile
     cap_add:
       - CAP_SYS_RESOURCE
     ports:
@@ -23,7 +23,7 @@ services:
       - stone
   stone:
     init: true
-    image: ghcr.io/ba-st/gs64-rowan:v${GS64_VERSION}
+    image: ghcr.io/ba-st/gs64-rowan:v3.7.1
     cap_add:
       - CAP_SYS_RESOURCE
     environment:
