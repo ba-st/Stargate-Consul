@@ -19,11 +19,11 @@ jobs:
           fetch-depth: 2
       - name: Configure keyfile
         run: |
-          echo "$GS_KEYFILE" > ./api-tests/gs64-{{ matrix.version }}/gemstone.key
+          echo "$GS_KEYFILE" > ./api-tests/gs64-${{ matrix.version }}/gemstone.key
         env:
           GS_KEYFILE: ${{ secrets.GS_KEYFILE }}
       - name: Run GS64 tests using Docker
-        run: ./compose-test-gs64.sh {{ matrix.version }}
+        run: ./compose-test-gs64.sh ${{ matrix.version }}
       - name: Remove keyfile
         if: always()
         run: rm -f ./api-tests/gs64/gemstone.key
