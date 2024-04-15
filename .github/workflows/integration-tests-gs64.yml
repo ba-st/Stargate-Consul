@@ -6,6 +6,12 @@ on:
 jobs:
    integration-tests:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "3.7.0"
+          - "3.7.1"
     name: Integration Tests GS64
     steps:
       - uses: actions/checkout@v4
@@ -14,10 +20,13 @@ jobs:
       - name: Configure keyfile
         run: |
           echo "$GS_KEYFILE" > ./api-tests/gs64/gemstone.key
+          echo "GS_VERSION=${{ matrix.version }}" > ./api-tests/gs64/.env
         env:
           GS_KEYFILE: ${{ secrets.GS_KEYFILE }}
       - name: Run GS64 tests using Docker
         run: ./compose-test-gs64.sh
+        env:
+          GS_VERSION: ${{ matrix.version }}
       - name: Remove keyfile
         if: always()
         run: rm -f ./api-tests/gs64/gemstone.key
