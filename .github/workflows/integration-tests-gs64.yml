@@ -20,9 +20,11 @@ jobs:
       - name: Configure keyfile
         run: |
           echo "$GS_KEYFILE" > ./api-tests/gs64/gemstone.key
-          echo "GS_VERSION=${{ matrix.version }}" > ./api-tests/gs64/.env
         env:
           GS_KEYFILE: ${{ secrets.GS_KEYFILE }}
+      - name: Configure env
+        run: |
+          echo "GS_VERSION=${{ matrix.version }}" > ./api-tests/gs64/.env
       - name: Run GS64 tests using Docker
         run: ./compose-test-gs64.sh
         env:
