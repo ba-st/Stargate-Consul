@@ -3,7 +3,7 @@
 set -e
 
 if [ $# -eq 0 ]; then
-  print_error "Missing GS64 version argument. Eg. 3.7.0"
+  echo "Error: Missing GS64 version argument. Eg. 3.7.0"
   exit 1
 fi
 
@@ -18,7 +18,7 @@ echo "Starting Consul Agent"
 docker compose -f "$GS64_COMPOSE_FILE" up -d consul-agent
 sleep 2
 echo "Installing support code"
-docker exec -i -u gemstone gs64-"$GS64_VERSION"-stone-1 ./load-rowan-project.sh Stargate-Consul Stargate-Consul-Examples
+docker exec -i -u gemstone "gs64-${GS64_VERSION//./}-stone-1" ./load-rowan-project.sh Stargate-Consul Stargate-Consul-Examples
 echo "Starting API"
 docker compose -f "$GS64_COMPOSE_FILE" up -d api
 sleep 10
