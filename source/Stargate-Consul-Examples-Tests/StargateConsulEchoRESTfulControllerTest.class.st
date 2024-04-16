@@ -1,22 +1,23 @@
 Class {
-	#name : #StargateConsulEchoRESTfulControllerTest,
-	#superclass : #SingleResourceRESTfulControllerTest,
-	#category : #'Stargate-Consul-Examples-Tests'
+	#name : 'StargateConsulEchoRESTfulControllerTest',
+	#superclass : 'SingleResourceRESTfulControllerTest',
+	#category : 'Stargate-Consul-Examples-Tests',
+	#package : 'Stargate-Consul-Examples-Tests'
 }
 
-{ #category : #'private - support' }
+{ #category : 'private - support' }
 StargateConsulEchoRESTfulControllerTest >> baseUrl [
 
 	^ 'http://api.example.com' asUrl
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 StargateConsulEchoRESTfulControllerTest >> setUpResourceController [
 
 	resourceController := StargateConsulEchoRESTfulController new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 StargateConsulEchoRESTfulControllerTest >> testMessageText [
 
 	| response |
