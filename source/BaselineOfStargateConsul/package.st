@@ -1,1 +1,1 @@
-Package { #name : #BaselineOfStargateConsul }
+Package { #name : 'BaselineOfStargateConsul' }

@@ -3,9 +3,8 @@ A StargateConsulExampleTest is a test class for testing the behavior of Stargate
 "
 Class {
 	#name : 'StargateConsulExampleTest',
-	#superclass : 'TestCase',
+	#superclass : 'LaunchpadTest',
 	#instVars : [
-		'application',
 		'port'
 	],
 	#category : 'Stargate-Consul-Examples-Tests',
@@ -13,43 +12,11 @@ Class {
 }
 
 { #category : 'running' }
-StargateConsulExampleTest >> runCase [
-
-	self shouldnt: [ super runCase ] raise: Exit
-]
-
-{ #category : 'running' }
 StargateConsulExampleTest >> setUp [
 
 	super setUp.
 	port := self freeListeningTCPPort.
 	StargateConsulExample logsDirectory ensureCreateDirectory
-]
-
-{ #category : 'running' }
-StargateConsulExampleTest >> start: aLaunchpadApplication withAll: arguments [
-
-	String streamContents: [ :stream | 
-		| context rootCommand |
-
-		rootCommand := LaunchpadRootCommand new.
-		context := LaunchpadCommandLineProcessingContext
-			           handling: ( CommandLineArguments withArguments: { 
-						             'launchpad'.
-						             'start'.
-						             aLaunchpadApplication commandName } , arguments )
-			           writingTo: stream.
-		self assert: ( rootCommand canHandle: ( context nextCommandLineArgumentIfNone: [ self fail ] ) ).
-		rootCommand evaluateWithin: context.
-		application := LaunchpadApplication currentlyRunning
-		]
-]
-
-{ #category : 'running' }
-StargateConsulExampleTest >> tearDown [
-
-	application ifNotNil: [ application stop ].
-	super tearDown
 ]
 
 { #category : 'tests' }
@@ -61,7 +28,7 @@ StargateConsulExampleTest >> testDefaultServiceDiscoveryTimeSlotBetweenRetries [
 			'--stargate.operations-secret=secret'.
 			'--stargate.consul-agent-location=' }.
 
-	self assert: application serviceDiscoveryTimeSlotBetweenRetries equals: 100 milliSeconds 
+	self assert: runningApplication serviceDiscoveryTimeSlotBetweenRetries equals: 100 milliSeconds 
 ]
 
 { #category : 'tests' }
@@ -96,7 +63,7 @@ StargateConsulExampleTest >> testStart [
 	response := ZnClient new
 		            beOneShot;
 		            enforceHttpSuccess: true;
-		            get: application configuration stargate publicURL / 'echo' / 'hello'.
+		            get: runningApplication configuration stargate publicURL / 'echo' / 'hello'.
 
 	self assert: response equals: 'HELLO'
 ]
