@@ -1,10 +1,11 @@
 Class {
-	#name : #BaselineOfStargateConsul,
-	#superclass : #BaselineOf,
-	#category : #BaselineOfStargateConsul
+	#name : 'BaselineOfStargateConsul',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfStargateConsul',
+	#package : 'BaselineOfStargateConsul'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfStargateConsul >> baseline: spec [
 
 	<baseline>
@@ -20,13 +21,13 @@ BaselineOfStargateConsul >> baseline: spec [
 			]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BaselineOfStargateConsul >> projectClass [
 
 	^ MetacelloCypressBaselineProject
 ]
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfStargateConsul >> setUpDependencies: spec [
 
 	spec
@@ -37,14 +38,15 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 
 	spec
 		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v5' ];
-		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ].
+		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ];
+		project: 'Launchpad-SUnit' copyFrom: 'Launchpad' with: [ spec loads: 'Dependent-SUnit-Extensions' ].
 
 	spec
 		baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v5' ];
 		project: 'Superluminal-API-Client' copyFrom: 'Superluminal' with: [ spec loads: 'API Client' ]
 ]
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfStargateConsul >> setUpPackages: spec [
 
 	spec
@@ -63,6 +65,6 @@ BaselineOfStargateConsul >> setUpPackages: spec [
 
 	spec
 		package: 'Stargate-Consul-Examples-Tests'
-		with: [ spec requires: #( 'Stargate-Consul-Examples' 'Stargate-SUnit' ) ];
+		with: [ spec requires: #( 'Stargate-Consul-Examples' 'Stargate-SUnit' 'Launchpad-SUnit' ) ];
 		group: 'Tests' with: 'Stargate-Consul-Examples-Tests'
 ]
