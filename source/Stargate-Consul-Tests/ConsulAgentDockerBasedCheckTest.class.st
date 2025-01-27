@@ -2,12 +2,13 @@
 A ConsulAgentDockerBasedCheckTest is a test class for testing the behavior of ConsulAgentDockerBasedCheck
 "
 Class {
-	#name : #ConsulAgentDockerBasedCheckTest,
-	#superclass : #TestCase,
-	#category : #'Stargate-Consul-Tests'
+	#name : 'ConsulAgentDockerBasedCheckTest',
+	#superclass : 'TestCase',
+	#category : 'Stargate-Consul-Tests',
+	#package : 'Stargate-Consul-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentDockerBasedCheckTest >> testAsJSON [
 
 	| check json |
@@ -31,7 +32,7 @@ ConsulAgentDockerBasedCheckTest >> testAsJSON [
 		assert: json Interval equals: '10s'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentDockerBasedCheckTest >> testCantCreateUnnamed [
 
 	self
@@ -46,7 +47,7 @@ ConsulAgentDockerBasedCheckTest >> testCantCreateUnnamed [
 		withMessageText: 'The check name cannot be empty'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentDockerBasedCheckTest >> testCantCreateWhenShellCommandIsMissing [
 
 	self
@@ -61,7 +62,7 @@ ConsulAgentDockerBasedCheckTest >> testCantCreateWhenShellCommandIsMissing [
 		withMessageText: 'The command to execute cannot be empty'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentDockerBasedCheckTest >> testCantCreateWithEmptyContainerId [
 
 	self
@@ -76,7 +77,7 @@ ConsulAgentDockerBasedCheckTest >> testCantCreateWithEmptyContainerId [
 		withMessageText: 'The target container id cannot be empty'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentDockerBasedCheckTest >> testCantCreateWithNegativeDuration [
 
 	self
@@ -91,7 +92,7 @@ ConsulAgentDockerBasedCheckTest >> testCantCreateWithNegativeDuration [
 		withMessageText: 'The execution interval must be strictly positive'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentDockerBasedCheckTest >> testCantCreateWithZeroDuration [
 
 	self

@@ -5,8 +5,8 @@ The application is triggered within the running container via the Docker Exec AP
 Consul uses $DOCKER_HOST to determine the Docker API endpoint. The application is expected to run, perform a health check of the service running inside the container, and exit with an appropriate exit code. The check should be paired with an invocation interval. The shell on which the check has to be performed is configurable, which make possible to run containers which have different shells on the same host. Check output for Docker is limited to 4KB. Any output larger than this will be truncated. 
 "
 Class {
-	#name : #ConsulAgentDockerBasedCheck,
-	#superclass : #ConsulAgentCheck,
+	#name : 'ConsulAgentDockerBasedCheck',
+	#superclass : 'ConsulAgentCheck',
 	#instVars : [
 		'name',
 		'shell',
@@ -14,10 +14,11 @@ Class {
 		'containerId',
 		'invocationInterval'
 	],
-	#category : #'Stargate-Consul'
+	#category : 'Stargate-Consul',
+	#package : 'Stargate-Consul'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ConsulAgentDockerBasedCheck class >> named: aName executing: aCommand withArguments: anArgumentArray inContainer: aContainerId every: aDuration [
 
 	AssertionCheckerBuilder new
@@ -40,7 +41,7 @@ ConsulAgentDockerBasedCheck class >> named: aName executing: aCommand withArgume
 		every: aDuration
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 ConsulAgentDockerBasedCheck >> asDictionary [
 
 	^ super asDictionary
@@ -50,7 +51,7 @@ ConsulAgentDockerBasedCheck >> asDictionary [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ConsulAgentDockerBasedCheck >> initializeNamed: aName executing: aCommand withArguments: anArgumentArray inContainer: aContainerId every: aDuration [
 
 	name := aName.
@@ -60,13 +61,13 @@ ConsulAgentDockerBasedCheck >> initializeNamed: aName executing: aCommand withAr
 	invocationInterval := aDuration
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulAgentDockerBasedCheck >> invocationInterval [
 
 	^ invocationInterval
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulAgentDockerBasedCheck >> name [
 
 	^ name

@@ -3,12 +3,13 @@ I represent an application-level health check to be performed by a Consul agent 
 There are several checks represented by my subclasses.
 "
 Class {
-	#name : #ConsulAgentCheck,
-	#superclass : #Object,
-	#category : #'Stargate-Consul'
+	#name : 'ConsulAgentCheck',
+	#superclass : 'Object',
+	#category : 'Stargate-Consul',
+	#package : 'Stargate-Consul'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 ConsulAgentCheck >> asDictionary [
 
 	^ Dictionary new
@@ -17,7 +18,7 @@ ConsulAgentCheck >> asDictionary [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulAgentCheck >> asGoTimeFormat: aDuration [
 
 	"A duration string is a possibly signed sequence of decimal numbers, each with optional fraction and a unit suffix, such as 300ms, -1.5h or 2h45m.
@@ -35,25 +36,25 @@ ConsulAgentCheck >> asGoTimeFormat: aDuration [
 			]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulAgentCheck >> invocationInterval [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulAgentCheck >> name [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #encoding }
+{ #category : 'encoding' }
 ConsulAgentCheck >> neoJsonOn: neoJSONWriter [
 
 	neoJSONWriter writeMap: self asDictionary
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulAgentCheck >> nextPut: aNumber of: aTimeUnitString in: stream [
 
 	aNumber strictlyPositive

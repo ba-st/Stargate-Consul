@@ -3,40 +3,41 @@ I'm one of the operational plugins.
 I provide support for registering and deregistering services on a Consul Agent (https://www.consul.io/) using the HTTP API.
 "
 Class {
-	#name : #ConsulServiceDiscoveryPlugin,
-	#superclass : #OperationalPlugin,
+	#name : 'ConsulServiceDiscoveryPlugin',
+	#superclass : 'OperationalPlugin',
 	#instVars : [
 		'apiClient',
 		'options'
 	],
-	#category : #'Stargate-Consul'
+	#category : 'Stargate-Consul',
+	#package : 'Stargate-Consul'
 }
 
-{ #category : #configuring }
+{ #category : 'configuring' }
 ConsulServiceDiscoveryPlugin class >> configureMediaControlsIn: builder within: requestContext [
 
 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ConsulServiceDiscoveryPlugin class >> configuredBy: configuration [
 
 	^ self with: ( self pluginConfigurationOn: configuration )
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulServiceDiscoveryPlugin class >> endpoint [
 
 	^ 'consul-service-discovery'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulServiceDiscoveryPlugin class >> pluginName [
 
 	^ 'Consul Service Discovery'
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ConsulServiceDiscoveryPlugin class >> reportingLifecycleOf: aServiceDefinition toAgentOn: aConsulAPIUrl [
 
 	^ self with: ( Dictionary new
@@ -45,31 +46,31 @@ ConsulServiceDiscoveryPlugin class >> reportingLifecycleOf: aServiceDefinition t
 			    yourself )
 ]
 
-{ #category : #'private - instance creation' }
+{ #category : 'private - instance creation' }
 ConsulServiceDiscoveryPlugin class >> with: options [
 
 	^self new initializeWith: options
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> baseAPILocation [
 
 	^ self consulAgentLocation / 'v1/agent/service'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> connectivityErrors [
 
 	^ HTTPError , NetworkError
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> consulAgentLocation [
 
 	^ ( options at: #consulAgentLocation ifAbsent: [ 'http://localhost:8500' ] ) asUrl
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> deregisterFromConsul: serviceDefinition [
 
 	apiClient
@@ -78,7 +79,7 @@ ConsulServiceDiscoveryPlugin >> deregisterFromConsul: serviceDefinition [
 		withSuccessfulResponseDo: [ :contents |  ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> deregistrationUrlFor: serviceDefinition [
 
 	| serviceId |
@@ -88,25 +89,25 @@ ConsulServiceDiscoveryPlugin >> deregistrationUrlFor: serviceDefinition [
 	^ self baseAPILocation / ( 'deregister/<1s>' expandMacrosWith: serviceId )
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> ignoreConnectivityErrorsDuring: aBlock [
 
 	aBlock on: self connectivityErrors
 		do: [ :error | error return ]
 ]
 
-{ #category : #configuring }
+{ #category : 'configuring' }
 ConsulServiceDiscoveryPlugin >> includeControllersIn: api [
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ConsulServiceDiscoveryPlugin >> initializeWith: configurationOptions [
 
 	options := configurationOptions.
 	apiClient := RESTfulAPIClient cachingOnLocalMemory
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> logDeregistrationFailedAtAttempt: attemptNumber dueTo: error [
 
 	LogRecord emitError:
@@ -116,7 +117,7 @@ ConsulServiceDiscoveryPlugin >> logDeregistrationFailedAtAttempt: attemptNumber 
 			 with: error messageText)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> logRegistrationFailedAtAttempt: attemptNumber dueTo: error [
 
 	LogRecord emitError:
@@ -126,7 +127,7 @@ ConsulServiceDiscoveryPlugin >> logRegistrationFailedAtAttempt: attemptNumber du
 			 with: error messageText)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> registerToConsul: serviceDefinition [
 
 	apiClient
@@ -135,19 +136,19 @@ ConsulServiceDiscoveryPlugin >> registerToConsul: serviceDefinition [
 		withSuccessfulResponseDo: [ :contents |  ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> retryCount [
 
 	^ 2
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> serviceDefinitions [
 
 	^ options at: #definitions
 ]
 
-{ #category : #controlling }
+{ #category : 'controlling' }
 ConsulServiceDiscoveryPlugin >> startOn: teapotServer [
 
 	self serviceDefinitions do: [ :serviceDefinition | 
@@ -158,7 +159,7 @@ ConsulServiceDiscoveryPlugin >> startOn: teapotServer [
 		]
 ]
 
-{ #category : #controlling }
+{ #category : 'controlling' }
 ConsulServiceDiscoveryPlugin >> stop [
 
 	self ignoreConnectivityErrorsDuring: [ 
@@ -173,7 +174,7 @@ ConsulServiceDiscoveryPlugin >> stop [
 		]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPlugin >> try: aBlock onConnectivityErrorDo: failBlock [
 
 	Retry value: aBlock configuredBy: [ :retry | 

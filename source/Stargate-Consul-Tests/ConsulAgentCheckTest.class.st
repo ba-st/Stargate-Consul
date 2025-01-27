@@ -2,12 +2,13 @@
 A ConsulAgentCheckTest is a test class for testing the behavior of ConsulAgentCheck
 "
 Class {
-	#name : #ConsulAgentCheckTest,
-	#superclass : #TestCase,
-	#category : #'Stargate-Consul-Tests'
+	#name : 'ConsulAgentCheckTest',
+	#superclass : 'TestCase',
+	#category : 'Stargate-Consul-Tests',
+	#package : 'Stargate-Consul-Tests'
 }
 
-{ #category : #test }
+{ #category : 'test' }
 ConsulAgentCheckTest >> testAsGoTimeFormat [
 
 	self
