@@ -17,6 +17,12 @@ Class {
 	#package : 'Stargate-Consul'
 }
 
+{ #category : 'private - testing' }
+ConsulAgentHTTPBasedCheck class >> isStrictlyPositive: aDuration [
+
+  ^ aDuration positive and: [ aDuration isZero not ]
+]
+
 { #category : 'instance creation' }
 ConsulAgentHTTPBasedCheck class >> named: aName executing: anHttpMethod against: anUrl withHeaders: aHeaderCollection every: aDuration timeoutAfter: timeoutDuration deregisteringAfterStatusCriticalFor: aTimeoutDurationUntilDeregistration [
 
@@ -25,13 +31,11 @@ ConsulAgentHTTPBasedCheck class >> named: aName executing: anHttpMethod against:
     checking: [ :asserter |
         asserter
           enforce: [ aName notEmpty ] because: 'The check name cannot be empty';
-          enforce: [ aDuration positive and: [ aDuration isZero not ] ]
+          enforce: [ self isStrictlyPositive: aDuration ]
           because: 'The execution interval must be strictly positive';
-          enforce: [ timeoutDuration positive and: [ timeoutDuration isZero not ] ]
+          enforce: [ self isStrictlyPositive: timeoutDuration ]
           because: 'The timeout must be strictly positive';
-          enforce: [
-              aTimeoutDurationUntilDeregistration positive and: [
-                    aTimeoutDurationUntilDeregistration isZero not ] ]
+          enforce: [ self isStrictlyPositive: aTimeoutDurationUntilDeregistration ]
           because: 'The deregistration timeout must be strictly positive'
       ];
     buildAndCheck.
