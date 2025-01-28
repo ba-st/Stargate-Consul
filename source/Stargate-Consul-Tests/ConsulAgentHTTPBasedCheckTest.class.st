@@ -2,136 +2,185 @@
 A ConsulAgentHTTPBasedCheckTest is a test class for testing the behavior of ConsulAgentHTTPBasedCheck
 "
 Class {
-	#name : #ConsulAgentHTTPBasedCheckTest,
-	#superclass : #TestCase,
-	#category : #'Stargate-Consul-Tests'
+	#name : 'ConsulAgentHTTPBasedCheckTest',
+	#superclass : 'TestCase',
+	#category : 'Stargate-Consul-Tests',
+	#package : 'Stargate-Consul-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentHTTPBasedCheckTest >> testAsJSON [
 
-	| check json |
+  | check json |
+  check := ConsulAgentHTTPBasedCheck
+             named: 'HTTP check'
+             executing: #POST
+             against: 'http://api.example.com' asUrl
+             withHeaders: #(  )
+             every: 10 seconds
+             timeoutAfter: 1.5 minutes
+             deregisteringAfterStatusCriticalFor: 5 minutes.
 
-	check := ConsulAgentHTTPBasedCheck
-		named: 'HTTP check'
-		executing: #POST
-		against: 'http://api.example.com' asUrl
-		withHeaders: #()
-		every: 10 seconds
-		timeoutAfter: 1.5 minutes.
+  json := NeoJSONObject fromString: ( NeoJSONWriter toStringPretty: check ).
 
-	json := NeoJSONObject fromString: ( NeoJSONWriter toStringPretty: check ).
-
-	self
-		assert: json Name equals: 'HTTP check';
-		assert: json Method equals: 'POST';
-		assert: json Header isEmpty;
-		assert: json HTTP equals: 'http://api.example.com/';
-		assert: json Timeout equals: '1m30s';
-		assert: json Interval equals: '10s'
+  self
+    assert: json Name equals: 'HTTP check';
+    assert: json Method equals: 'POST';
+    assert: json Header isEmpty;
+    assert: json HTTP equals: 'http://api.example.com/';
+    assert: json Timeout equals: '1m30s';
+    assert: json Interval equals: '10s';
+    assert: json deregister_critical_service_after equals: '5m'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentHTTPBasedCheckTest >> testAsJSONWhenHeadersArePresent [
 
-	| check json |
-	check := ConsulAgentHTTPBasedCheck
-		         named: 'HTTP check'
-		         executing: #POST
-		         against: 'http://api.example.com' asUrl
-		         withHeaders: { #accept -> ZnMimeType applicationJson }
-		         every: 10 seconds
-		         timeoutAfter: 1.5 minutes.
+  | check json |
+  check := ConsulAgentHTTPBasedCheck
+             named: 'HTTP check'
+             executing: #POST
+             against: 'http://api.example.com' asUrl
+             withHeaders: { ( #accept -> ZnMimeType applicationJson ) }
+             every: 10 seconds
+             timeoutAfter: 1.5 minutes
+             deregisteringAfterStatusCriticalFor: 5 minutes.
 
-	json := NeoJSONObject fromString:
-		        (NeoJSONWriter toStringPretty: check).
+  json := NeoJSONObject fromString: ( NeoJSONWriter toStringPretty: check ).
 
-	self
-		assert: json Name equals: 'HTTP check';
-		assert: json Method equals: 'POST';
-		withTheOnlyOneIn: json Header accept
-		do: [ :header | self assert: header equals: 'application/json' ];
-		assert: json HTTP equals: 'http://api.example.com/';
-		assert: json Timeout equals: '1m30s';
-		assert: json Interval equals: '10s'
+  self
+    assert: json Name equals: 'HTTP check';
+    assert: json Method equals: 'POST';
+    withTheOnlyOneIn: json Header accept
+    do: [ :header | self assert: header equals: 'application/json' ];
+    assert: json HTTP equals: 'http://api.example.com/';
+    assert: json Timeout equals: '1m30s';
+    assert: json Interval equals: '10s';
+    assert: json deregister_critical_service_after equals: '5m'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentHTTPBasedCheckTest >> testCantCreateUnnamed [
 
-	self
-		should: [ ConsulAgentHTTPBasedCheck
-				named: ''
-				executing: #POST
-				against: 'http://api.example.com' asUrl
-				withHeaders: #()
-				every: 10 seconds
-				timeoutAfter: 1.5 minutes
-			]
-		raise: InstanceCreationFailed
-		withMessageText: 'The check name cannot be empty'
+  self
+    should: [
+        ConsulAgentHTTPBasedCheck
+          named: ''
+          executing: #POST
+          against: 'http://api.example.com' asUrl
+          withHeaders: #(  )
+          every: 10 seconds
+          timeoutAfter: 1.5 minutes
+          deregisteringAfterStatusCriticalFor: 5 minutes
+      ]
+    raise: InstanceCreationFailed
+    withMessageText: 'The check name cannot be empty'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
+ConsulAgentHTTPBasedCheckTest >> testCantCreateWithNegativeDeregistrationTimeout [
+
+  self
+    should: [
+        ConsulAgentHTTPBasedCheck
+          named: 'xxx'
+          executing: #POST
+          against: 'http://api.example.com' asUrl
+          withHeaders: #(  )
+          every: 10 seconds
+          timeoutAfter: 1.5 minutes
+          deregisteringAfterStatusCriticalFor: -1 minutes
+      ]
+    raise: InstanceCreationFailed
+    withMessageText: 'The deregistration timeout must be strictly positive'
+]
+
+{ #category : 'tests' }
 ConsulAgentHTTPBasedCheckTest >> testCantCreateWithNegativeDuration [
 
-	self
-		should: [ ConsulAgentHTTPBasedCheck
-				named: 'xxx'
-				executing: #POST
-				against: 'http://api.example.com' asUrl
-				withHeaders: #()
-				every: -10 seconds
-				timeoutAfter: 1.5 minutes
-			]
-		raise: InstanceCreationFailed
-		withMessageText: 'The execution interval must be strictly positive'
+  self
+    should: [
+        ConsulAgentHTTPBasedCheck
+          named: 'xxx'
+          executing: #POST
+          against: 'http://api.example.com' asUrl
+          withHeaders: #(  )
+          every: -10 seconds
+          timeoutAfter: 1.5 minutes
+          deregisteringAfterStatusCriticalFor: 5 minutes
+      ]
+    raise: InstanceCreationFailed
+    withMessageText: 'The execution interval must be strictly positive'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentHTTPBasedCheckTest >> testCantCreateWithNegativeTimeout [
 
-	self
-		should: [ ConsulAgentHTTPBasedCheck
-				named: 'xxx'
-				executing: #POST
-				against: 'http://api.example.com' asUrl
-				withHeaders: #()
-				every: 10 seconds
-				timeoutAfter: -1 minutes
-			]
-		raise: InstanceCreationFailed
-		withMessageText: 'The timeout must be strictly positive'
+  self
+    should: [
+        ConsulAgentHTTPBasedCheck
+          named: 'xxx'
+          executing: #POST
+          against: 'http://api.example.com' asUrl
+          withHeaders: #(  )
+          every: 10 seconds
+          timeoutAfter: -1 minutes
+          deregisteringAfterStatusCriticalFor: 5 minutes
+      ]
+    raise: InstanceCreationFailed
+    withMessageText: 'The timeout must be strictly positive'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
+ConsulAgentHTTPBasedCheckTest >> testCantCreateWithZeroDeregistrationTimeout [
+
+  self
+    should: [
+        ConsulAgentHTTPBasedCheck
+          named: 'xxx'
+          executing: #POST
+          against: 'http://api.example.com' asUrl
+          withHeaders: #(  )
+          every: 10 seconds
+          timeoutAfter: 1.5 minutes
+          deregisteringAfterStatusCriticalFor: 0 minutes
+      ]
+    raise: InstanceCreationFailed
+    withMessageText: 'The deregistration timeout must be strictly positive'
+]
+
+{ #category : 'tests' }
 ConsulAgentHTTPBasedCheckTest >> testCantCreateWithZeroDuration [
 
-	self
-		should: [ ConsulAgentHTTPBasedCheck
-				named: 'xxx'
-				executing: #POST
-				against: 'http://api.example.com' asUrl
-				withHeaders: #()
-				every: 0 seconds
-				timeoutAfter: 1.5 minutes
-			]
-		raise: InstanceCreationFailed
-		withMessageText: 'The execution interval must be strictly positive'
+  self
+    should: [
+        ConsulAgentHTTPBasedCheck
+          named: 'xxx'
+          executing: #POST
+          against: 'http://api.example.com' asUrl
+          withHeaders: #(  )
+          every: 0 seconds
+          timeoutAfter: 1.5 minutes
+          deregisteringAfterStatusCriticalFor: 5 minutes
+      ]
+    raise: InstanceCreationFailed
+    withMessageText: 'The execution interval must be strictly positive'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulAgentHTTPBasedCheckTest >> testCantCreateWithZeroTimeout [
 
-	self
-		should: [ ConsulAgentHTTPBasedCheck
-				named: 'xxx'
-				executing: #POST
-				against: 'http://api.example.com' asUrl
-				withHeaders: #()
-				every: 10 seconds
-				timeoutAfter: 0 minutes
-			]
-		raise: InstanceCreationFailed
-		withMessageText: 'The timeout must be strictly positive'
+  self
+    should: [
+        ConsulAgentHTTPBasedCheck
+          named: 'xxx'
+          executing: #POST
+          against: 'http://api.example.com' asUrl
+          withHeaders: #(  )
+          every: 10 seconds
+          timeoutAfter: 0 minutes
+          deregisteringAfterStatusCriticalFor: 5 minutes
+      ]
+    raise: InstanceCreationFailed
+    withMessageText: 'The timeout must be strictly positive'
 ]

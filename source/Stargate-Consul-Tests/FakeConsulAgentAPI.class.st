@@ -2,8 +2,8 @@
 I'm a fake object. I will impersonate the Consul Agent HTTP API, and can be used in tests without requiring a real Consul installation.
 "
 Class {
-	#name : #FakeConsulAgentAPI,
-	#superclass : #Object,
+	#name : 'FakeConsulAgentAPI',
+	#superclass : 'Object',
 	#instVars : [
 		'server',
 		'registeredServices',
@@ -11,16 +11,17 @@ Class {
 		'isFirstRegisterRequestReceived',
 		'isFirstDeregisterRequestReceived'
 	],
-	#category : #'Stargate-Consul-Tests'
+	#category : 'Stargate-Consul-Tests',
+	#package : 'Stargate-Consul-Tests'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 FakeConsulAgentAPI class >> configuredBy: configuration on: aTestAsserter [
 
 	^ self new initializeConfiguredBy: configuration on: aTestAsserter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FakeConsulAgentAPI >> configureTeapotServerWith: configuration [
 
 	server := Teapot configure: configuration.
@@ -31,7 +32,7 @@ FakeConsulAgentAPI >> configureTeapotServerWith: configuration [
 				-> [ :request | self handleServiceDeregistration: request ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 FakeConsulAgentAPI >> handleServiceDeregistration: request [
 
 	"I will fail on purpose the first request to te be able to test the retry mechanics"
@@ -51,7 +52,7 @@ FakeConsulAgentAPI >> handleServiceDeregistration: request [
 			  ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 FakeConsulAgentAPI >> handleServiceRegistration: request [
 
 	"I will fail on purpose the first request to te be able to test the retry mechanics"
@@ -74,7 +75,7 @@ FakeConsulAgentAPI >> handleServiceRegistration: request [
 			  ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 FakeConsulAgentAPI >> initializeConfiguredBy: configuration on: aTestAsserter [
 
 	registeredServices := OrderedCollection new.
@@ -84,25 +85,25 @@ FakeConsulAgentAPI >> initializeConfiguredBy: configuration on: aTestAsserter [
 	self configureTeapotServerWith: configuration
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FakeConsulAgentAPI >> registeredServiceCount [
 
 	^ registeredServices size
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FakeConsulAgentAPI >> registeredServices [
 
 	^ registeredServices
 ]
 
-{ #category : #controlling }
+{ #category : 'controlling' }
 FakeConsulAgentAPI >> start [
 
 	server start
 ]
 
-{ #category : #controlling }
+{ #category : 'controlling' }
 FakeConsulAgentAPI >> stop [
 
 	server stop

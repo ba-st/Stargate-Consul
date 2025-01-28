@@ -2,15 +2,16 @@
 A ConsulServiceDefinitionBuilderTest is a test class for testing the behavior of ConsulServiceDefinitionBuilder
 "
 Class {
-	#name : #ConsulServiceDefinitionBuilderTest,
-	#superclass : #TestCase,
+	#name : 'ConsulServiceDefinitionBuilderTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'builder'
 	],
-	#category : #'Stargate-Consul-Tests'
+	#category : 'Stargate-Consul-Tests',
+	#package : 'Stargate-Consul-Tests'
 }
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 ConsulServiceDefinitionBuilderTest >> assertDefinition: aServiceDefinition jsonEquals: aJSONString [
 
 	self
@@ -18,20 +19,20 @@ ConsulServiceDefinitionBuilderTest >> assertDefinition: aServiceDefinition jsonE
 		equals: ( NeoJSONObject fromString: aJSONString )
 ]
 
-{ #category : #'private - asserting' }
+{ #category : 'private - asserting' }
 ConsulServiceDefinitionBuilderTest >> assertNameIn: definition equals: aString [
 
 	self assert: definition Name equals: aString
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 ConsulServiceDefinitionBuilderTest >> setUp [
 
 	super setUp.
 	builder := ConsulServiceDefinitionBuilder new
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDefinitionBuilderTest >> testEnableTagOverride [
 
 	| definition |
@@ -45,7 +46,7 @@ ConsulServiceDefinitionBuilderTest >> testEnableTagOverride [
 		assertDefinition: definition jsonEquals: '{"Name":"redis","EnableTagOverride":true}'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDefinitionBuilderTest >> testServiceWithMetadata [
 
 	| definition |
@@ -61,7 +62,7 @@ ConsulServiceDefinitionBuilderTest >> testServiceWithMetadata [
 			jsonEquals: '{"Name":"redis","Meta":{"version":"1.2.5","author":"anonymous"}}'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDefinitionBuilderTest >> testServiceWithOnlyOneCheck [
 
 	| definition |
@@ -83,43 +84,39 @@ ConsulServiceDefinitionBuilderTest >> testServiceWithOnlyOneCheck [
 			'{"Name":"redis","Checks":[{"Name":"check","Shell":"/bin/bash","Args":["true"],"DockerContainerID":"xxx","Interval":"1ms"}]}'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDefinitionBuilderTest >> testServiceWithSeveralChecks [
 
-	| definition |
+  | definition |
+  definition := builder
+                  addCheck: ( ConsulAgentDockerBasedCheck
+                        named: 'check'
+                        executing: '/bin/bash'
+                        withArguments: #( 'true' )
+                        inContainer: 'xxx'
+                        every: 1 milliSecond );
+                  addCheck: ( ConsulAgentHTTPBasedCheck
+                        named: 'ping'
+                        executing: #GET
+                        against: 'https://api.example.com'
+                        withHeaders: #(  )
+                        every: 100 milliSeconds
+                        timeoutAfter: 1 minute
+                        deregisteringAfterStatusCriticalFor: 5 minutes );
+                  buildNamed: 'redis'.
 
-	definition := builder
-		addCheck:
-			( ConsulAgentDockerBasedCheck
-				named: 'check'
-				executing: '/bin/bash'
-				withArguments: #('true')
-				inContainer: 'xxx'
-				every: 1 milliSecond );
-		addCheck:
-			( ConsulAgentHTTPBasedCheck
-				named: 'ping'
-				executing: #GET
-				against: 'https://api.example.com'
-				withHeaders: #()
-				every: 100 milliSeconds
-				timeoutAfter: 1 minute );
-		buildNamed: 'redis'.
-
-	self
-		assertNameIn: definition equals: 'redis';
-		assertDefinition: definition
-			jsonEquals:
-			'{
+  self
+    assertNameIn: definition equals: 'redis';
+    assertDefinition: definition jsonEquals: '{
 				"Name":"redis",
 				"Checks":[
 					{"Name":"check","Shell":"/bin/bash","Args":["true"],"DockerContainerID":"xxx","Interval":"1ms"},
-					{"Name":"ping","HTTP":"https://api.example.com/","Method":"GET","Header":{},"Interval":"100ms","Timeout":"1m"}
+					{"Name":"ping","HTTP":"https://api.example.com/","Method":"GET","Header":{},"Interval":"100ms","Timeout":"1m","deregister_critical_service_after":"5m"}
 				]
 			}'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDefinitionBuilderTest >> testServiceWithTaggedAddresses [
 
 	| definition |
@@ -136,7 +133,7 @@ ConsulServiceDefinitionBuilderTest >> testServiceWithTaggedAddresses [
 			'{"Name":"redis","TaggedAddresses":{"lan":{"address":"127.0.0.0"},"wan":{"address":"198.18.0.53","port":80}}}'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDefinitionBuilderTest >> testSimpleServiceCreation [
 
 	| definition |
@@ -158,7 +155,7 @@ ConsulServiceDefinitionBuilderTest >> testSimpleServiceCreation [
 			jsonEquals: '{"Name":"redis","ID":"redis1","Address":"localhost","Tags":["primary","cache"],"Port":8800}'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDefinitionBuilderTest >> testSimplestServiceCreation [
 
 	| definition |

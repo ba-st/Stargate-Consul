@@ -1,26 +1,27 @@
 Class {
-	#name : #ConsulServiceDiscoveryPluginAPITest,
-	#superclass : #OperationalPluginAPITest,
+	#name : 'ConsulServiceDiscoveryPluginAPITest',
+	#superclass : 'OperationalPluginAPITest',
 	#instVars : [
 		'consulAgent',
 		'consulAgentPort'
 	],
-	#category : #'Stargate-Consul-Tests'
+	#category : 'Stargate-Consul-Tests',
+	#package : 'Stargate-Consul-Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPluginAPITest >> consulAgentLocation [
 
 	^ 'http://localhost' asUrl port: consulAgentPort
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 ConsulServiceDiscoveryPluginAPITest >> isLogging [
 
 	^ true
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPluginAPITest >> operationsConfiguration [
 
 	^ super operationsConfiguration
@@ -33,13 +34,13 @@ ConsulServiceDiscoveryPluginAPITest >> operationsConfiguration [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPluginAPITest >> requiredPermissions [
 
 	^ #()
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 ConsulServiceDiscoveryPluginAPITest >> runCase [
 
 	| logs |
@@ -52,13 +53,13 @@ ConsulServiceDiscoveryPluginAPITest >> runCase [
 	self logFailure: logs
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulServiceDiscoveryPluginAPITest >> serviceDefinitions [
 
 	^ { ConsulServiceDefinitionBuilder new buildNamed: 'test' }
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 ConsulServiceDiscoveryPluginAPITest >> setUp [
 
 	consulAgentPort := self freeListeningTCPPort.
@@ -72,7 +73,7 @@ ConsulServiceDiscoveryPluginAPITest >> setUp [
 	super setUp
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 ConsulServiceDiscoveryPluginAPITest >> tearDown [
 
 	super tearDown.
@@ -80,7 +81,7 @@ ConsulServiceDiscoveryPluginAPITest >> tearDown [
 	consulAgent stop
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDiscoveryPluginAPITest >> testPluginIsEnabled [
 
 	self

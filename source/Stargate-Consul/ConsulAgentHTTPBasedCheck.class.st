@@ -2,44 +2,55 @@
 I'm a kind of Consul Agent health check depending on performing an HTTP request.
 "
 Class {
-	#name : #ConsulAgentHTTPBasedCheck,
-	#superclass : #ConsulAgentCheck,
+	#name : 'ConsulAgentHTTPBasedCheck',
+	#superclass : 'ConsulAgentCheck',
 	#instVars : [
 		'name',
 		'url',
 		'method',
 		'headers',
 		'timeout',
-		'invocationInterval'
+		'invocationInterval',
+		'deregistrationTimeout'
 	],
-	#category : #'Stargate-Consul'
+	#category : 'Stargate-Consul',
+	#package : 'Stargate-Consul'
 }
 
-{ #category : #'instance creation' }
-ConsulAgentHTTPBasedCheck class >> named: aName executing: anHttpMethod against: anUrl withHeaders: aHeaderCollection every: aDuration timeoutAfter: timeoutDuration [
+{ #category : 'private - testing' }
+ConsulAgentHTTPBasedCheck class >> isStrictlyPositive: aDuration [
 
-	AssertionCheckerBuilder new
-		raising: InstanceCreationFailed;
-		checking: [ :asserter | 
-			asserter
-				enforce: [ aName notEmpty ] because: 'The check name cannot be empty';
-				enforce: [ aDuration positive and: [ aDuration isZero not ] ]
-					because: 'The execution interval must be strictly positive';
-				enforce: [ timeoutDuration positive and: [ timeoutDuration isZero not ] ]
-					because: 'The timeout must be strictly positive'
-			];
-		buildAndCheck.
-
-	^ self new
-		initializeNamed: aName
-		executing: anHttpMethod
-		against: anUrl asUrl
-		withHeaders: aHeaderCollection
-		every: aDuration
-		timeoutAfter: timeoutDuration
+  ^ aDuration positive and: [ aDuration isZero not ]
 ]
 
-{ #category : #converting }
+{ #category : 'instance creation' }
+ConsulAgentHTTPBasedCheck class >> named: aName executing: anHttpMethod against: anUrl withHeaders: aHeaderCollection every: aDuration timeoutAfter: timeoutDuration deregisteringAfterStatusCriticalFor: aTimeoutDurationUntilDeregistration [
+
+  AssertionCheckerBuilder new
+    raising: InstanceCreationFailed;
+    checking: [ :asserter |
+        asserter
+          enforce: [ aName notEmpty ] because: 'The check name cannot be empty';
+          enforce: [ self isStrictlyPositive: aDuration ]
+          because: 'The execution interval must be strictly positive';
+          enforce: [ self isStrictlyPositive: timeoutDuration ]
+          because: 'The timeout must be strictly positive';
+          enforce: [ self isStrictlyPositive: aTimeoutDurationUntilDeregistration ]
+          because: 'The deregistration timeout must be strictly positive'
+      ];
+    buildAndCheck.
+
+  ^ self new
+      initializeNamed: aName
+      executing: anHttpMethod
+      against: anUrl asUrl
+      withHeaders: aHeaderCollection
+      every: aDuration
+      timeoutAfter: timeoutDuration
+      deregisteringAfterStatusCriticalFor: aTimeoutDurationUntilDeregistration
+]
+
+{ #category : 'converting' }
 ConsulAgentHTTPBasedCheck >> asDictionary [
 
 	^ super asDictionary
@@ -47,10 +58,11 @@ ConsulAgentHTTPBasedCheck >> asDictionary [
 		at: 'Method' put: method;
 		at: 'Header' put: headers;
 		at: 'Timeout' put: ( self asGoTimeFormat: timeout );
+		at: 'deregister_critical_service_after' put: (self asGoTimeFormat: deregistrationTimeout);
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ConsulAgentHTTPBasedCheck >> initializeHeadersBasedOn: aHeaderCollection [
 
 	"Consul expects an array of strings as values for the headers.	"
@@ -67,30 +79,31 @@ ConsulAgentHTTPBasedCheck >> initializeHeadersBasedOn: aHeaderCollection [
 			]
 ]
 
-{ #category : #initialization }
-ConsulAgentHTTPBasedCheck >> initializeNamed: aName executing: anHttpMethod against: anUrl withHeaders: aHeaderCollection every: aDuration timeoutAfter: timeoutDuration [
+{ #category : 'initialization' }
+ConsulAgentHTTPBasedCheck >> initializeNamed: aName executing: anHttpMethod against: anUrl withHeaders: aHeaderCollection every: aDuration timeoutAfter: timeoutDuration deregisteringAfterStatusCriticalFor: aTimeoutDurationUntilDeregistration [
 
-	name := aName.
-	method := anHttpMethod.
-	url := anUrl.
-	self initializeHeadersBasedOn: aHeaderCollection.
-	invocationInterval := aDuration.
-	timeout := timeoutDuration
+  name := aName.
+  method := anHttpMethod.
+  url := anUrl.
+  self initializeHeadersBasedOn: aHeaderCollection.
+  invocationInterval := aDuration.
+  timeout := timeoutDuration.
+  deregistrationTimeout := aTimeoutDurationUntilDeregistration
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulAgentHTTPBasedCheck >> invocationInterval [
 
 	^ invocationInterval
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulAgentHTTPBasedCheck >> name [
 
 	^ name
 ]
 
-{ #category : #encoding }
+{ #category : 'encoding' }
 ConsulAgentHTTPBasedCheck >> neoJsonOn: neoJSONWriter [
 
 	( neoJSONWriter customMappingFor: ZnMimeType ) encoder: [ :mediaType | mediaType asString ].

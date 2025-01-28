@@ -1,16 +1,17 @@
 Class {
-	#name : #ConsulAwareStargateApplication,
-	#superclass : #StargateApplication,
-	#category : #'Stargate-Consul'
+	#name : 'ConsulAwareStargateApplication',
+	#superclass : 'StargateApplication',
+	#category : 'Stargate-Consul',
+	#package : 'Stargate-Consul'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 ConsulAwareStargateApplication class >> isAbstract [
 
 	^ self = ConsulAwareStargateApplication
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ConsulAwareStargateApplication class >> stargateConfigurationParameters [
 
 	^ super stargateConfigurationParameters , { 
@@ -27,7 +28,7 @@ ConsulAwareStargateApplication class >> stargateConfigurationParameters [
 			   defaultingTo: 'http') }
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 ConsulAwareStargateApplication >> buildServiceDefinitionNamed: serviceName configuredBy: aBlock [
 
 	| builder |
@@ -44,7 +45,7 @@ ConsulAwareStargateApplication >> buildServiceDefinitionNamed: serviceName confi
 	^ builder buildNamed: serviceName
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 ConsulAwareStargateApplication >> configureDockerHostnameFor: serviceName in: builder [
 
 	self
@@ -56,28 +57,29 @@ ConsulAwareStargateApplication >> configureDockerHostnameFor: serviceName in: bu
 		ifAbsent: [  ]
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 ConsulAwareStargateApplication >> configureHealthCheckIn: builder [
 
-	builder addCheck: ( ConsulAgentHTTPBasedCheck
-			  named: 'health-check'
-			  executing: #POST
-			  against: self healthCheckEndpoint
-			  withHeaders: { 
-					  #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0'.
-					  #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken ) }
-			  every: self serviceDiscoveryHealthCheckInterval
-			  timeoutAfter: self serviceDiscoveryHealthCheckTimeout )
+  builder addCheck: ( ConsulAgentHTTPBasedCheck
+        named: 'health-check'
+        executing: #POST
+        against: self healthCheckEndpoint
+        withHeaders:
+          { ( #accept -> 'application/vnd.stargate.health-check.summary+json;version=1.0.0' ) .
+            ( #authorization -> ( 'Bearer <1s>' expandMacrosWith: self healthCheckToken ) ) }
+        every: self serviceDiscoveryHealthCheckInterval
+        timeoutAfter: self serviceDiscoveryHealthCheckTimeout
+        deregisteringAfterStatusCriticalFor: self serviceDiscoveryDeregistrationTimeout )
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 ConsulAwareStargateApplication >> configureMetadataIn: builder [
 
 	BasicApplicationInformationProvider new gatherInformation keysAndValuesDo: [ :key :value | 
 		builder metadataAt: key put: value ]
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 ConsulAwareStargateApplication >> consulServiceDiscoveryConfiguration [
 
 	^ Dictionary new
@@ -90,7 +92,7 @@ ConsulAwareStargateApplication >> consulServiceDiscoveryConfiguration [
 		  yourself
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 ConsulAwareStargateApplication >> healthCheckEndpoint [
 
 	| baseUrl |
@@ -108,7 +110,7 @@ ConsulAwareStargateApplication >> healthCheckEndpoint [
 	^ baseUrl / 'operations' asUrl / HealthCheckPlugin endpoint
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 ConsulAwareStargateApplication >> healthCheckToken [
 
 	| jws |
@@ -122,13 +124,13 @@ ConsulAwareStargateApplication >> healthCheckToken [
 	^ jws compactSerialized
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 ConsulAwareStargateApplication >> isServiceDiscoveryThroughConsulEnabled [
 
 	^ self stargateConfiguration consulAgentLocation isEmpty not
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 ConsulAwareStargateApplication >> operationsConfiguration [
 
 	^ super operationsConfiguration
@@ -136,31 +138,37 @@ ConsulAwareStargateApplication >> operationsConfiguration [
 		  yourself
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 ConsulAwareStargateApplication >> serviceDefinitions [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - accessing' }
+ConsulAwareStargateApplication >> serviceDiscoveryDeregistrationTimeout [
+
+  ^ 5 minutes
+]
+
+{ #category : 'private - accessing' }
 ConsulAwareStargateApplication >> serviceDiscoveryHealthCheckInterval [
 
 	^ 10 seconds
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - accessing' }
 ConsulAwareStargateApplication >> serviceDiscoveryHealthCheckTimeout [
 
 	^ 1 minute
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 ConsulAwareStargateApplication >> serviceDiscoveryTimeSlotBetweenRetries [
 
 	^ 100 milliSeconds
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 ConsulAwareStargateApplication >> withDockerHostnameDo: aFoundBlock ifAbsent: aNotFoundBlock [
 	"Inside Docker containers the HOSTNAME variable holds the container id"
 

@@ -1,26 +1,27 @@
 Class {
-	#name : #ConsulServiceDiscoveryPluginInteractionTest,
-	#superclass : #TestCase,
+	#name : 'ConsulServiceDiscoveryPluginInteractionTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'consulAgent',
 		'port'
 	],
-	#category : #'Stargate-Consul-Tests'
+	#category : 'Stargate-Consul-Tests',
+	#package : 'Stargate-Consul-Tests'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulServiceDiscoveryPluginInteractionTest >> apiServer [
 	
 	^ Teapot new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ConsulServiceDiscoveryPluginInteractionTest >> baseUrl [
 
 	^ 'http://localhost' asUrl port: port
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 ConsulServiceDiscoveryPluginInteractionTest >> setUp [
 
 	super setUp.
@@ -34,14 +35,14 @@ ConsulServiceDiscoveryPluginInteractionTest >> setUp [
 	consulAgent start
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 ConsulServiceDiscoveryPluginInteractionTest >> tearDown [
 
 	consulAgent stop.
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDiscoveryPluginInteractionTest >> testStartOn [
 
 	| plugin |
@@ -63,7 +64,7 @@ ConsulServiceDiscoveryPluginInteractionTest >> testStartOn [
 			]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ConsulServiceDiscoveryPluginInteractionTest >> testStop [
 
 	| plugin |
