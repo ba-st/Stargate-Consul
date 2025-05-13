@@ -45,7 +45,7 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 	spec
 		baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v6' ];
 		project: 'Superluminal-API-Client' copyFrom: 'Superluminal' with: [ spec loads: 'API Client' ];
-		project: 'Superluminal-SUnit' copyFrom: 'Superluminal' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
+		project: 'Superluminal-SUnit' copyFrom: 'Superluminal' with: [ spec loads: 'Dependent-SUnit-Extensions' ]
 ]
 
 { #category : 'baselines' }
