@@ -17,6 +17,7 @@ BaselineOfStargateConsul >> baseline: spec [
 			spec
 				group: 'CI' with: 'Tests';
 				group: 'Tools' with: #('Stargate-Tools');
+				group: 'Dependent-SUnit-Extensions' with: #('Stargate-SUnit' 'Launchpad-SUnit' 'Superluminal-SUnit');
 				group: 'Development' with: #('Tests' 'Tools' 'Examples')
 			]
 ]
@@ -43,7 +44,8 @@ BaselineOfStargateConsul >> setUpDependencies: spec [
 
 	spec
 		baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v6' ];
-		project: 'Superluminal-API-Client' copyFrom: 'Superluminal' with: [ spec loads: 'API Client' ]
+		project: 'Superluminal-API-Client' copyFrom: 'Superluminal' with: [ spec loads: 'API Client' ];
+		project: 'Superluminal-SUnit' copyFrom: 'Superluminal' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
 ]
 
 { #category : 'baselines' }
