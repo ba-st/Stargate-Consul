@@ -25,4 +25,4 @@ jobs:
         run: ./compose-test-gs64.sh ${{ matrix.version }}
       - name: Remove keyfile
         if: always()
-        run: rm -f ./api-tests/gs64/gemstone.key
+        run: rm -f ./api-tests/gs64-${{ matrix.version }}/gemstone.key

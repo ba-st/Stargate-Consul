@@ -3,7 +3,7 @@
 set -e
 
 if [ $# -eq 0 ]; then
-  echo "Error: Missing GS64 version argument. Eg. 3.7.0"
+  echo "Error: Missing GS64 version argument. Eg. 3.7.1"
   exit 1
 fi
 
