@@ -10,7 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - "3.7.0"
           - "3.7.1"
     name: Integration Tests GS64
     steps:
