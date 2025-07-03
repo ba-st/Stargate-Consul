@@ -10,7 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - "3.7.0"
           - "3.7.1"
     name: Integration Tests GS64
     steps:
@@ -26,4 +25,4 @@ jobs:
         run: ./compose-test-gs64.sh ${{ matrix.version }}
       - name: Remove keyfile
         if: always()
-        run: rm -f ./api-tests/gs64/gemstone.key
+        run: rm -f ./api-tests/gs64-${{ matrix.version }}/gemstone.key

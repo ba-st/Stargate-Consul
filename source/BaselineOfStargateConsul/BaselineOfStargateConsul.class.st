@@ -32,18 +32,18 @@ BaselineOfStargateConsul >> projectClass [
 BaselineOfStargateConsul >> setUpDependencies: spec [
 
 	spec
-		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v10' ];
+		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v11' ];
 		project: 'Stargate-Deployment' copyFrom: 'Stargate' with: [ spec loads: 'Deployment' ];
 		project: 'Stargate-SUnit' copyFrom: 'Stargate' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
 		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
 
 	spec
-		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v6' ];
+		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v7' ];
 		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ];
 		project: 'Launchpad-SUnit' copyFrom: 'Launchpad' with: [ spec loads: 'Dependent-SUnit-Extensions' ].
 
 	spec
-		baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v6' ];
+		baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v7' ];
 		project: 'Superluminal-API-Client' copyFrom: 'Superluminal' with: [ spec loads: 'API Client' ];
 		project: 'Superluminal-SUnit' copyFrom: 'Superluminal' with: [ spec loads: 'Dependent-SUnit-Extensions' ]
 ]
