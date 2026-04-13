@@ -2,7 +2,7 @@ RwLoadSpecificationV2 {
   #specName: 'Superluminal',
   #projectName : 'Superluminal',
   #gitUrl : 'https://github.com/ba-st/Superluminal.git',
-  #revision : 'v7',
+  #revision : 'v8',
   #projectSpecFile : 'rowan/project.ston',
   #componentNames : [
     'API-Client',
