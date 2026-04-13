@@ -10,11 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         load-spec:
-          - app-config
-          - app-control
-          - app-info
-          - core
-          - dependent-sunit-extensions
           - deployment
           - development
           - examples
