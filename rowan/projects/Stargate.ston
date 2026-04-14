@@ -2,7 +2,7 @@ RwLoadSpecificationV2 {
   #specName: 'Stargate',
   #projectName : 'Stargate',
   #gitUrl : 'https://github.com/ba-st/Stargate.git',
-  #revision : 'v11',
+  #revision : 'v12',
   #projectSpecFile : 'rowan/project.ston',
   #componentNames : [
     'Deployment',
