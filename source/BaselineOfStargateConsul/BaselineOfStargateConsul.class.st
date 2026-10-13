@@ -31,21 +31,27 @@ BaselineOfStargateConsul >> projectClass [
 { #category : 'baselines' }
 BaselineOfStargateConsul >> setUpDependencies: spec [
 
-	spec
-		baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v12' ];
-		project: 'Stargate-Deployment' copyFrom: 'Stargate' with: [ spec loads: 'Deployment' ];
-		project: 'Stargate-SUnit' copyFrom: 'Stargate' with: [ spec loads: 'Dependent-SUnit-Extensions' ];
-		project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
+  spec
+    baseline: 'Stargate' with: [ spec repository: 'github://ba-st/Stargate:v13' ];
+    project: 'Stargate-Deployment' copyFrom: 'Stargate' with: [ spec loads: 'Deployment' ];
+    project: 'Stargate-SUnit'
+    copyFrom: 'Stargate'
+    with: [ spec loads: 'Dependent-SUnit-Extensions' ];
+    project: 'Stargate-Tools' copyFrom: 'Stargate' with: [ spec loads: 'Tools' ].
 
-	spec
-		baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v8' ];
-		project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ];
-		project: 'Launchpad-SUnit' copyFrom: 'Launchpad' with: [ spec loads: 'Dependent-SUnit-Extensions' ].
+  spec
+    baseline: 'Launchpad' with: [ spec repository: 'github://ba-st/Launchpad:v8' ];
+    project: 'Launchpad-Deployment' copyFrom: 'Launchpad' with: [ spec loads: 'Deployment' ];
+    project: 'Launchpad-SUnit'
+    copyFrom: 'Launchpad'
+    with: [ spec loads: 'Dependent-SUnit-Extensions' ].
 
-	spec
-		baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v8' ];
-		project: 'Superluminal-API-Client' copyFrom: 'Superluminal' with: [ spec loads: 'API Client' ];
-		project: 'Superluminal-SUnit' copyFrom: 'Superluminal' with: [ spec loads: 'Dependent-SUnit-Extensions' ]
+  spec
+    baseline: 'Superluminal' with: [ spec repository: 'github://ba-st/Superluminal:v9' ];
+    project: 'Superluminal-API-Client' copyFrom: 'Superluminal' with: [ spec loads: 'API Client' ];
+    project: 'Superluminal-SUnit'
+    copyFrom: 'Superluminal'
+    with: [ spec loads: 'Dependent-SUnit-Extensions' ]
 ]
 
 { #category : 'baselines' }
